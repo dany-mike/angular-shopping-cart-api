@@ -13,4 +13,10 @@ export class ProductsService {
       .get('https://fakestoreapi.com/products')
       .pipe(map((res) => res.data));
   }
+
+  getProductById(id): Observable<AxiosResponse<Product[]>> {
+    return this.httpService
+      .get(`https://fakestoreapi.com/products/${id}`)
+      .pipe(map((res) => res.data));
+  }
 }
