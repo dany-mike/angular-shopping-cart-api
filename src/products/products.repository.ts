@@ -25,7 +25,7 @@ export class ProductRepository extends Repository<Product> {
   };
 
   findOneProduct = async (id: number): Promise<Product> => {
-    return this.findOneOrFail(id);
+    return this.findOne(id);
   };
 
   findProducts = async (): Promise<Product[]> => {
@@ -46,6 +46,6 @@ export class ProductRepository extends Repository<Product> {
 
   deleteProduct = async (id: number): Promise<Product> => {
     this.delete(id);
-    return await this.findOneOrFail(id);
+    return await this.findOne(id);
   };
 }

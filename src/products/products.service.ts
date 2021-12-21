@@ -46,27 +46,49 @@ export class ProductsService {
     );
   }
 
-  getProductsFromDb(): Promise<Product[]> {
-    return this.productRepository.findProducts();
+  async getProductsFromDb(): Promise<any> {
+    const products = await this.productRepository.findProducts();
+
+    if (!products) {
+      throw new NotFoundException('Products not found');
+    }
+
+    return products;
   }
 
-  getProductByIdFromDb(id: number): Promise<Product> {
-    return this.productRepository.findOneProduct(id);
+  async getProductByIdFromDb(id: number): Promise<any> {
+    const result = await this.productRepository.findOneProduct(id);
+
+    if (!result) {
+      throw new NotFoundException(`Product with id: ${id} not found`);
+    }
+
+    return result;
   }
 
-  updateProduct(
+  async updateProduct(
     id: number,
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productRepository.updateProduct(
+  ): Promise<any> {
+    const result = await this.productRepository.updateProduct(
       id,
       createProductDto,
       productCategoryDto,
     );
+
+    if (!result) {
+      throw new NotFoundException(`Product with id: ${id} not found`);
+    }
+
+    return result;
   }
 
-  deleteProduct(id: number): Promise<Product> {
-    return this.productRepository.deleteProduct(id);
+  async deleteProduct(id: number): Promise<void> {
+    const result = await this.productRepository.deleteProduct(id);
+
+    if (!result) {
+      throw new NotFoundException(`Product with id: ${id} not found`);
+    }
   }
 }
