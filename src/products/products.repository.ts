@@ -36,7 +36,7 @@ export class ProductRepository extends Repository<Product> {
     id: number,
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ) => {
+  ): Promise<Product> => {
     return this.save({
       ...createProductDto,
       ...productCategoryDto,
@@ -44,8 +44,8 @@ export class ProductRepository extends Repository<Product> {
     });
   };
 
-  removeProduct = async (id: number) => {
-    await this.findOneOrFail(id);
-    return this.delete(id);
+  deleteProduct = async (id: number): Promise<Product> => {
+    this.delete(id);
+    return await this.findOneOrFail(id);
   };
 }

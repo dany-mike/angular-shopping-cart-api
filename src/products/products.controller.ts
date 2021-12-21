@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
@@ -45,11 +53,16 @@ export class ProductsController {
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
     @Body() productCategoryDto: ProductCategoryDto,
-  ) {
+  ): Promise<Product> {
     return this.productsService.updateProduct(
       id,
       productDto,
       productCategoryDto,
     );
+  }
+
+  @Delete(':id')
+  deleteProduct(@Param('id') id: number) {
+    return this.productsService.deleteProduct(id);
   }
 }

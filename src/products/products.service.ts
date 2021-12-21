@@ -65,4 +65,8 @@ export class ProductsService {
       productCategoryDto,
     );
   }
+
+  deleteProduct(id: number): Promise<Product> {
+    return this.productRepository.deleteProduct(id);
+  }
 }
