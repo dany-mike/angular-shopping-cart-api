@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
@@ -38,5 +38,18 @@ export class ProductsController {
     @Body() productCategoryDto: ProductCategoryDto,
   ): Promise<Product> {
     return this.productsService.createProduct(productDto, productCategoryDto);
+  }
+
+  @Put(':id')
+  updateProduct(
+    @Param('id') id: number,
+    @Body() productDto: CreateProductDto,
+    @Body() productCategoryDto: ProductCategoryDto,
+  ) {
+    return this.productsService.updateProduct(
+      id,
+      productDto,
+      productCategoryDto,
+    );
   }
 }

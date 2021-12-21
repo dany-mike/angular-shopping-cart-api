@@ -23,4 +23,29 @@ export class ProductRepository extends Repository<Product> {
     await this.save(product);
     return product;
   };
+
+  findOneProduct = async (id: number): Promise<Product> => {
+    return this.findOneOrFail(id);
+  };
+
+  findProducts = async (): Promise<Product[]> => {
+    return this.find();
+  };
+
+  updateProduct = async (
+    id: number,
+    createProductDto: CreateProductDto,
+    productCategoryDto: ProductCategoryDto,
+  ) => {
+    return this.save({
+      ...createProductDto,
+      ...productCategoryDto,
+      id: Number(id),
+    });
+  };
+
+  removeProduct = async (id: number) => {
+    await this.findOneOrFail(id);
+    return this.delete(id);
+  };
 }

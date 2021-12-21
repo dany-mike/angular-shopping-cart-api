@@ -46,17 +46,23 @@ export class ProductsService {
     );
   }
 
-  async getProductsFromDb(): Promise<Product[]> {
-    return await this.productRepository.find();
+  getProductsFromDb(): Promise<Product[]> {
+    return this.productRepository.findProducts();
   }
 
-  async getProductByIdFromDb(id: number): Promise<Product> {
-    const found = await this.productRepository.findOne(id);
+  getProductByIdFromDb(id: number): Promise<Product> {
+    return this.productRepository.findOneProduct(id);
+  }
 
-    if (!found) {
-      throw new NotFoundException(`Product with id: ${id} not found`);
-    }
-
-    return found;
+  updateProduct(
+    id: number,
+    createProductDto: CreateProductDto,
+    productCategoryDto: ProductCategoryDto,
+  ): Promise<Product> {
+    return this.productRepository.updateProduct(
+      id,
+      createProductDto,
+      productCategoryDto,
+    );
   }
 }
