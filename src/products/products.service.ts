@@ -39,10 +39,24 @@ export class ProductsService {
   createProduct(
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ) {
+  ): Promise<Product> {
     return this.productRepository.createProduct(
       createProductDto,
       productCategoryDto,
     );
+  }
+
+  async getProductsFromDb(): Promise<Product[]> {
+    return await this.productRepository.find();
+  }
+
+  async getProductByIdFromDb(id: number): Promise<Product> {
+    const found = await this.productRepository.findOne(id);
+
+    if (!found) {
+      throw new NotFoundException(`Product with id: ${id} not found`);
+    }
+
+    return found;
   }
 }

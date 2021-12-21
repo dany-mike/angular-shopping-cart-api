@@ -15,6 +15,16 @@ export class ProductsController {
     return this.productsService.getProducts();
   }
 
+  @Get('/db')
+  getProductsFromDB(): Promise<Product[]> {
+    return this.productsService.getProductsFromDb();
+  }
+
+  @Get('/db/:id')
+  getProductByIdFromDB(@Param('id') id: number): Promise<Product> {
+    return this.productsService.getProductByIdFromDb(id);
+  }
+
   @Get(':id')
   getProductById(
     @Param('id') id: number,
@@ -26,9 +36,7 @@ export class ProductsController {
   create(
     @Body() productDto: CreateProductDto,
     @Body() productCategoryDto: ProductCategoryDto,
-  ) {
-    console.log(productDto);
-    console.log(productCategoryDto);
+  ): Promise<Product> {
     return this.productsService.createProduct(productDto, productCategoryDto);
   }
 }
