@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
@@ -19,4 +19,9 @@ export class ProductsController {
   ): Observable<AxiosResponse<Product[]>> {
     return this.productsService.getProductById(id);
   }
+
+  // @Post('')
+  // createProduct(@Req() request: Request): Product {
+
+  // }
 }
