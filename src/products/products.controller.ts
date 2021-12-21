@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Logger } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { Product } from './product.model';
+import { ProductDto } from './product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -20,8 +21,9 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
-  // @Post('')
-  // createProduct(@Req() request: Request): Product {
-
-  // }
+  @Post()
+  create(@Body() productDto: ProductDto): Promise<Product> {
+    Logger.log('TEST');
+    return this.productsService.createProduct(productDto);
+  }
 }
