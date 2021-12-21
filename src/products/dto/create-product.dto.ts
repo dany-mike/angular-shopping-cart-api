@@ -1,6 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
+import { Category } from '../product.model';
 
-export class ProductDto {
+export class CreateProductDto {
   @IsNotEmpty()
   title: string;
 
@@ -13,11 +14,4 @@ export class ProductDto {
   category: Category;
 
   image: string;
-}
-
-enum Category {
-  ELECTRONICS = 'electronics',
-  JEWELRY = 'jewelry',
-  MENS_CLOTHING = "men's clothing",
-  WOMENS_CLOTHING = "women's clothing",
 }
