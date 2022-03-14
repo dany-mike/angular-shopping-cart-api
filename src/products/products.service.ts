@@ -1,20 +1,22 @@
 import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
-import { Product } from './product.model';
+import { Product as ProductInterface } from './product.model';
 import { map } from 'rxjs/operators';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductRepository } from './products.repository';
+import { ProductsRepository } from './products.repository';
 import { ProductCategoryDto } from './dto/product-category.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private httpService: HttpService,
-    private productRepository: ProductRepository,
+    @InjectRepository(ProductsRepository)
+    private productsRepository: ProductsRepository,
   ) {}
 
-  getProducts(): Observable<AxiosResponse<Product[]>> {
+  getProducts(): Observable<AxiosResponse<ProductInterface[]>> {
     return this.httpService.get('https://fakestoreapi.com/products').pipe(
       map((res) => {
         if (!res.data) {
@@ -25,7 +27,7 @@ export class ProductsService {
     );
   }
 
-  getProductById(id): Observable<AxiosResponse<Product[]>> {
+  getProductById(id): Observable<AxiosResponse<ProductInterface[]>> {
     return this.httpService.get(`https://fakestoreapi.com/products/${id}`).pipe(
       map((res) => {
         if (!res.data) {
@@ -39,15 +41,15 @@ export class ProductsService {
   createProduct(
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productRepository.createProduct(
+  ): Promise<ProductInterface> {
+    return this.productsRepository.createProduct(
       createProductDto,
       productCategoryDto,
     );
   }
 
   async getProductsFromDb(): Promise<any> {
-    const products = await this.productRepository.findProducts();
+    const products = await this.productsRepository.findProducts();
 
     if (!products) {
       throw new NotFoundException('Products not found');
@@ -57,7 +59,7 @@ export class ProductsService {
   }
 
   async getProductByIdFromDb(id: number): Promise<any> {
-    const result = await this.productRepository.findOneProduct(id);
+    const result = await this.productsRepository.findOneProduct(id);
 
     if (!result) {
       throw new NotFoundException(`Product with id: ${id} not found`);
@@ -71,7 +73,7 @@ export class ProductsService {
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
   ): Promise<any> {
-    const result = await this.productRepository.updateProduct(
+    const result = await this.productsRepository.updateProduct(
       id,
       createProductDto,
       productCategoryDto,
@@ -85,7 +87,7 @@ export class ProductsService {
   }
 
   async deleteProduct(id: number): Promise<void> {
-    const result = await this.productRepository.deleteProduct(id);
+    const result = await this.productsRepository.deleteProduct(id);
 
     if (!result) {
       throw new NotFoundException(`Product with id: ${id} not found`);

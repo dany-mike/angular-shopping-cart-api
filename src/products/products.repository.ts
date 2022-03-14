@@ -4,7 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { ProductCategoryDto } from './dto/product-category.dto';
 
 @EntityRepository(Product)
-export class ProductRepository extends Repository<Product> {
+export class ProductsRepository extends Repository<Product> {
   createProduct = async (
     productDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
