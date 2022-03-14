@@ -42,7 +42,7 @@ export class ProductsService {
   createProduct(
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ): Promise<ProductInterface> {
+  ): Promise<Product> {
     return this.productsRepository.createProduct(
       createProductDto,
       productCategoryDto,
