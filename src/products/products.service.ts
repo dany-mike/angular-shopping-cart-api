@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsRepository } from './products.repository';
 import { ProductCategoryDto } from './dto/product-category.dto';
+import { Product } from './product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -48,7 +49,7 @@ export class ProductsService {
     );
   }
 
-  async getProductsFromDb(): Promise<any> {
+  async getProductsFromDb(): Promise<Product[]> {
     const products = await this.productsRepository.findProducts();
 
     if (!products) {
@@ -58,7 +59,7 @@ export class ProductsService {
     return products;
   }
 
-  async getProductByIdFromDb(id: number): Promise<any> {
+  async getProductByIdFromDb(id: number): Promise<Product> {
     const result = await this.productsRepository.findOneProduct(id);
 
     if (!result) {
@@ -72,7 +73,7 @@ export class ProductsService {
     id: number,
     createProductDto: CreateProductDto,
     productCategoryDto: ProductCategoryDto,
-  ): Promise<any> {
+  ): Promise<Product> {
     const result = await this.productsRepository.updateProduct(
       id,
       createProductDto,
