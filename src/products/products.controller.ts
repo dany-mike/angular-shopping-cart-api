@@ -1,46 +1,35 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
-  Body,
   Put,
-  Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { AxiosResponse } from 'axios';
-import { Observable } from 'rxjs';
-import { Product } from './product.model';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductCategoryDto } from './dto/product-category.dto';
+import { Product } from './product.model';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
-  @Get()
-  getProducts(): Observable<AxiosResponse<Product[]>> {
+  @Get('')
+  getProducts(): Promise<Product[]> {
     return this.productsService.getProducts();
   }
 
-  @Get('/db')
-  getProductsFromDB(): Promise<Product[]> {
-    return this.productsService.getProductsFromDb();
-  }
-
-  @Get('/db/:id')
-  getProductByIdFromDB(@Param('id') id: number): Promise<Product> {
-    return this.productsService.getProductByIdFromDb(id);
-  }
-
-  @Get(':id')
-  getProductById(
-    @Param('id') id: number,
-  ): Observable<AxiosResponse<Product[]>> {
+  @Get('/:id')
+  getProductById(@Param('id') id: number): Promise<Product> {
     return this.productsService.getProductById(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   create(
     @Body() productDto: CreateProductDto,
     @Body() productCategoryDto: ProductCategoryDto,
@@ -49,6 +38,7 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard())
   updateProduct(
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
@@ -62,6 +52,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard())
   deleteProduct(@Param('id') id: number) {
     return this.productsService.deleteProduct(id);
   }
