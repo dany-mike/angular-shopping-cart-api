@@ -1,6 +1,6 @@
 import { User } from './user.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { RegisterDto } from './dtos/register.dto';
 import {
   ConflictException,
   InternalServerErrorException,
@@ -9,16 +9,18 @@ import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { username, password } = authCredentialsDto;
+  async createUser(registerDto: RegisterDto): Promise<void> {
+    const { email, password, firstname, lastname } = registerDto;
 
     const salt = await bcrypt.genSalt(10);
 
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = this.create({
-      username,
+      email,
       password: hashedPassword,
+      firstname,
+      lastname,
     });
 
     try {
