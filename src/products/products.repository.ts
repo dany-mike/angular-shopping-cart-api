@@ -37,7 +37,7 @@ export class ProductsRepository extends Repository<Product> {
     }
     return this.save({
       ...createProductDto,
-      id: Number(id),
+      id,
     });
   };
 

@@ -5,8 +5,6 @@ import { ProductsModule } from './products/products.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { CategoryService } from './category/category.service';
-import { CategoryController } from './category/category.controller';
 import { CategoryModule } from './category/category.module';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database.module';
@@ -29,7 +27,7 @@ import { DatabaseModule } from './database.module';
     }),
     DatabaseModule,
   ],
-  controllers: [AppController, CategoryController],
-  providers: [AppService, CategoryService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
