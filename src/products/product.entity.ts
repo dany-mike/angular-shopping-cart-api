@@ -15,8 +15,5 @@ export class Product {
   description: string;
 
   @Column()
-  category: string;
-
-  @Column()
   image: string;
 }

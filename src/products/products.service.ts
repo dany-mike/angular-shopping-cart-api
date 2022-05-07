@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductCategoryDto } from './dto/product-category.dto';
 import { Product } from './product.entity';
 import { ProductsRepository } from './products.repository';
 
@@ -12,14 +11,8 @@ export class ProductsService {
     private productsRepository: ProductsRepository,
   ) {}
 
-  createProduct(
-    createProductDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productsRepository.createProduct(
-      createProductDto,
-      productCategoryDto,
-    );
+  createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    return this.productsRepository.createProduct(createProductDto);
   }
 
   async getProducts(): Promise<Product[]> {
@@ -45,12 +38,10 @@ export class ProductsService {
   async updateProduct(
     id: number,
     createProductDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
   ): Promise<Product> {
     const result = await this.productsRepository.updateProduct(
       id,
       createProductDto,
-      productCategoryDto,
     );
 
     if (!result) {

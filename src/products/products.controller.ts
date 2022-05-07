@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductCategoryDto } from './dto/product-category.dto';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
 
@@ -30,11 +29,8 @@ export class ProductsController {
 
   @Post()
   @UseGuards(AuthGuard())
-  create(
-    @Body() productDto: CreateProductDto,
-    @Body() productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productsService.createProduct(productDto, productCategoryDto);
+  create(@Body() productDto: CreateProductDto): Promise<Product> {
+    return this.productsService.createProduct(productDto);
   }
 
   @Put(':id')
@@ -42,13 +38,8 @@ export class ProductsController {
   updateProduct(
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
-    @Body() productCategoryDto: ProductCategoryDto,
   ): Promise<Product> {
-    return this.productsService.updateProduct(
-      id,
-      productDto,
-      productCategoryDto,
-    );
+    return this.productsService.updateProduct(id, productDto);
   }
 
   @Delete(':id')
