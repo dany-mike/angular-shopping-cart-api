@@ -30,6 +30,11 @@ export class ProductsRepository extends Repository<Product> {
     id: number,
     createProductDto: CreateProductDto,
   ): Promise<Product> => {
+    const result = await this.findOne(id);
+
+    if (!result) {
+      return null;
+    }
     return this.save({
       ...createProductDto,
       id: Number(id),
