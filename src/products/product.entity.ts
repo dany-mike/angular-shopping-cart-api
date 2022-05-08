@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Category } from 'src/category/category.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
@@ -6,18 +7,26 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column()
   title: string;
 
+  @ApiProperty()
   @Column()
   price: number;
 
+  @ApiProperty()
+  @ApiPropertyOptional()
   @Column()
   description: string;
 
+  @ApiProperty()
+  @ApiPropertyOptional()
   @Column()
   image: string;
 
+  @ApiProperty()
+  @ApiPropertyOptional()
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 }
