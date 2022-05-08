@@ -1,5 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
-import { Category } from '../product.model';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -8,10 +7,12 @@ export class CreateProductDto {
   @IsNotEmpty()
   price: number;
 
+  @IsOptional()
   description: string;
 
-  @IsNotEmpty()
-  category: Category;
-
+  @IsOptional()
   image: string;
+
+  @IsOptional()
+  categoryId: number;
 }

@@ -10,8 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductCategoryDto } from './dto/product-category.dto';
-import { Product } from './product.model';
+import { Product } from './product.entity';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -28,13 +27,17 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
+  @Get('/c/:category')
+  getProductsByCategory(
+    @Param('category') categoryId: number,
+  ): Promise<Product[]> {
+    return this.productsService.getProductsByCategory(categoryId);
+  }
+
   @Post()
   @UseGuards(AuthGuard())
-  create(
-    @Body() productDto: CreateProductDto,
-    @Body() productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productsService.createProduct(productDto, productCategoryDto);
+  create(@Body() productDto: CreateProductDto): Promise<Product> {
+    return this.productsService.createProduct(productDto);
   }
 
   @Put(':id')
@@ -42,13 +45,8 @@ export class ProductsController {
   updateProduct(
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
-    @Body() productCategoryDto: ProductCategoryDto,
   ): Promise<Product> {
-    return this.productsService.updateProduct(
-      id,
-      productDto,
-      productCategoryDto,
-    );
+    return this.productsService.updateProduct(id, productDto);
   }
 
   @Delete(':id')

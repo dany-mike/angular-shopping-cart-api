@@ -1,23 +1,22 @@
 import { Product } from './product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductCategoryDto } from './dto/product-category.dto';
+import { Category } from 'src/category/category.entity';
 
 @EntityRepository(Product)
 export class ProductsRepository extends Repository<Product> {
   createProduct = async (
     productDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
+    category?: Category,
   ): Promise<Product> => {
     const { title, price, image, description } = productDto;
-    const { category } = productCategoryDto;
 
     const product = this.create({
       title,
       description: description ? description : '',
       price,
       image: image ? image : '',
-      category,
+      category: category ? category : undefined,
     });
 
     await this.save(product);
@@ -35,12 +34,15 @@ export class ProductsRepository extends Repository<Product> {
   updateProduct = async (
     id: number,
     createProductDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
   ): Promise<Product> => {
+    const result = await this.findOne(id);
+
+    if (!result) {
+      return null;
+    }
     return this.save({
       ...createProductDto,
-      ...productCategoryDto,
-      id: Number(id),
+      id,
     });
   };
 

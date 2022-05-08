@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from 'src/category/category.entity';
+import { CategoryService } from 'src/category/category.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductCategoryDto } from './dto/product-category.dto';
 import { Product } from './product.entity';
 import { ProductsRepository } from './products.repository';
 
@@ -10,16 +15,25 @@ export class ProductsService {
   constructor(
     @InjectRepository(ProductsRepository)
     private productsRepository: ProductsRepository,
+    private categoryService: CategoryService,
   ) {}
 
-  createProduct(
-    createProductDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
-  ): Promise<Product> {
-    return this.productsRepository.createProduct(
-      createProductDto,
-      productCategoryDto,
-    );
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    const { categoryId } = createProductDto;
+
+    let category: Category;
+    // TODO: Remove duplicate when I handle stocks
+    if (categoryId) {
+      category = await this.categoryService.getCategoryById(categoryId);
+
+      if (!category) {
+        throw new BadRequestException(
+          `Category with id: ${categoryId} does not exist`,
+        );
+      }
+    }
+
+    return this.productsRepository.createProduct(createProductDto, category);
   }
 
   async getProducts(): Promise<Product[]> {
@@ -42,15 +56,21 @@ export class ProductsService {
     return result;
   }
 
+  async getProductsByCategory(id: number) {
+    const products = await this.productsRepository.find({
+      where: { category: id },
+    });
+
+    return products;
+  }
+
   async updateProduct(
     id: number,
     createProductDto: CreateProductDto,
-    productCategoryDto: ProductCategoryDto,
   ): Promise<Product> {
     const result = await this.productsRepository.updateProduct(
       id,
       createProductDto,
-      productCategoryDto,
     );
 
     if (!result) {
