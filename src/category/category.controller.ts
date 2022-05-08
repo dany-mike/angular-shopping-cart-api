@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiProperty } from '@nestjs/swagger';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -23,28 +24,28 @@ export class CategoryController {
   }
 
   @Get('/:id')
-  getProductById(@Param('id') id: number): Promise<Category> {
+  getCategoryById(@Param('id') id: number): Promise<Category> {
     return this.categoryService.getCategoryById(id);
   }
 
   @Post()
   @UseGuards(AuthGuard())
-  create(@Body() productDto: CreateCategoryDto): Promise<Category> {
-    return this.categoryService.createCategory(productDto);
+  create(@Body() categoryDto: CreateCategoryDto): Promise<Category> {
+    return this.categoryService.createCategory(categoryDto);
   }
 
   @Put(':id')
   @UseGuards(AuthGuard())
-  updateProduct(
+  updateCategory(
     @Param('id') id: number,
-    @Body() productDto: CreateCategoryDto,
+    @Body() categoryDto: CreateCategoryDto,
   ): Promise<Category> {
-    return this.categoryService.updateCategory(id, productDto);
+    return this.categoryService.updateCategory(id, categoryDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard())
-  deleteProduct(@Param('id') id: number) {
+  deleteCategory(@Param('id') id: number) {
     return this.categoryService.deleteCategory(id);
   }
 }
