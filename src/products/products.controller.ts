@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Product } from './product.model';
+import { Product } from './product.entity';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -25,6 +25,13 @@ export class ProductsController {
   @Get('/:id')
   getProductById(@Param('id') id: number): Promise<Product> {
     return this.productsService.getProductById(id);
+  }
+
+  @Get('/c/:category')
+  getProductsByCategory(
+    @Param('category') categoryId: number,
+  ): Promise<Product[]> {
+    return this.productsService.getProductsByCategory(categoryId);
   }
 
   @Post()

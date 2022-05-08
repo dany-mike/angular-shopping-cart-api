@@ -12,6 +12,7 @@ import { CategoryService } from './category.service';
     AuthModule,
   ],
   controllers: [CategoryController],
+  exports: [CategoryService],
   providers: [CategoryService],
 })
 export class CategoryModule {}

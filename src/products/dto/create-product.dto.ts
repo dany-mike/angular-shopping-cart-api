@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -7,7 +7,12 @@ export class CreateProductDto {
   @IsNotEmpty()
   price: number;
 
+  @IsOptional()
   description: string;
 
+  @IsOptional()
   image: string;
+
+  @IsOptional()
+  categoryId: number;
 }
