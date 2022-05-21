@@ -9,7 +9,7 @@ export class Product {
 
   @ApiProperty()
   @Column()
-  title: string;
+  name: string;
 
   @ApiProperty()
   @Column()

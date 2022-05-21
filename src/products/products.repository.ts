@@ -9,10 +9,10 @@ export class ProductsRepository extends Repository<Product> {
     productDto: CreateProductDto,
     category?: Category,
   ): Promise<Product> => {
-    const { title, price, image, description } = productDto;
+    const { name, price, image, description } = productDto;
 
     const product = this.create({
-      title,
+      name,
       description: description ? description : '',
       price,
       image: image ? image : '',
