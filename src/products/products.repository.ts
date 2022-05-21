@@ -42,7 +42,7 @@ export class ProductsRepository extends Repository<Product> {
     }
     return this.save({
       ...createProductDto,
-      id,
+      id: result.id,
     });
   };
 
