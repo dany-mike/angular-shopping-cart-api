@@ -36,7 +36,7 @@ export class CategoryRepository extends Repository<Category> {
     }
     return this.save({
       ...createCategoryDto,
-      id,
+      id: result.id,
     });
   };
 
