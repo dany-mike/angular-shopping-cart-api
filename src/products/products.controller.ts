@@ -35,13 +35,13 @@ export class ProductsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   create(@Body() productDto: CreateProductDto): Promise<Product> {
     return this.productsService.createProduct(productDto);
   }
 
   @Put(':id')
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   updateProduct(
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
@@ -50,7 +50,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   deleteProduct(@Param('id') id: number) {
     return this.productsService.deleteProduct(id);
   }

@@ -11,6 +11,10 @@ services:
     - docker.env
     networks:
     - postgres
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+      POSTGRES_DB: "nestjs_ecommerce"
  
   pgadmin:
     links:
@@ -18,7 +22,13 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     ports:
-    - "8080:80"
+    - "8080:8080"
+    depends_on:
+        -   postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_LISTEN_PORT: 8080
     volumes:
     - /data/pgadmin:/root/.pgadmin
     env_file:
