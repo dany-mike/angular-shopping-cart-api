@@ -1,7 +1,10 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dtos/register.dto';
+import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
+import RolesGuard from './guards/roles.guard';
+import { Role } from './enums/role.enum';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -9,6 +12,13 @@ export class AuthController {
   @Post('signup')
   signUp(@Body() registerDto: RegisterDto): Promise<void> {
     return this.authService.signUp(registerDto);
+  }
+
+  @Post('createAdmin')
+  @UseGuards(RolesGuard(Role.SuperAdmin))
+  @UseGuards(AuthGuard())
+  createAdmin(@Body() registerAdminDto: RegisterAdminDto): Promise<void> {
+    return this.authService.createAdmin(registerAdminDto);
   }
 
   @Post('signin')
