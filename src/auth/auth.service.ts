@@ -30,7 +30,12 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
-      return { accessToken };
+      const userResponse = {
+        ...user,
+        accessToken,
+      };
+
+      return userResponse;
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
