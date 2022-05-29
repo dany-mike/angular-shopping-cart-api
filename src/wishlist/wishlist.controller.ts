@@ -1,4 +1,5 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Product } from 'src/products/product.entity';
 import { AddToWishlistDto } from './dto/addToWishlist';
 import { Wishlist } from './wishlist.entity';
 import { WishlistService } from './wishlist.service';
@@ -7,11 +8,16 @@ import { WishlistService } from './wishlist.service';
 export class WishlistController {
   constructor(private wishlistService: WishlistService) {}
 
-  @Post('/:userId')
+  @Post(':userId')
   addToWishlist(
     @Body() wishlistDto: AddToWishlistDto,
     @Param('userId') userId: string,
   ): Promise<Wishlist> {
     return this.wishlistService.addToWishlist(wishlistDto, userId);
+  }
+
+  @Get(':userId')
+  getWishlistProducts(@Param('userId') userId: string): Promise<Product[]> {
+    return this.wishlistService.getWishlistProducts(userId);
   }
 }

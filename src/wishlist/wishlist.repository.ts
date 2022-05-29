@@ -18,4 +18,12 @@ export class WishlistRepository extends Repository<Wishlist> {
     await this.save(wishlist);
     return wishlist;
   };
+  getWishlistItemsByUserId = async (userId): Promise<Wishlist[]> => {
+    const wishlist = await this.find({
+      where: {
+        userId,
+      },
+    });
+    return wishlist;
+  };
 }

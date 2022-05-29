@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from 'src/products/product.entity';
+import { ProductsService } from 'src/products/products.service';
 import { AddToWishlistDto } from './dto/addToWishlist';
 import { Wishlist } from './wishlist.entity';
 import { WishlistRepository } from './wishlist.repository';
@@ -9,6 +11,7 @@ export class WishlistService {
   constructor(
     @InjectRepository(WishlistRepository)
     private wishlistRepository: WishlistRepository,
+    private productsService: ProductsService,
   ) {}
   async addToWishlist(
     addToWishlistDto: AddToWishlistDto,
@@ -16,4 +19,26 @@ export class WishlistService {
   ): Promise<Wishlist> {
     return this.wishlistRepository.addToWishlist(addToWishlistDto, userId);
   }
+
+  async getWishlistProducts(userId: string): Promise<Product[]> {
+    const wishlistProducts =
+      await this.wishlistRepository.getWishlistItemsByUserId(userId);
+
+    const productsIds = [];
+    wishlistProducts.forEach((product) => {
+      productsIds.push(product.productId);
+    });
+
+    const products = await this.productsService.findProductsByIds(productsIds);
+
+    return products;
+  }
+
+  // async getProductsByCategory(id: number) {
+  //   const products = await this.productsRepository.find({
+  //     where: { category: id },
+  //   });
+
+  //   return products;
+  // }
 }
