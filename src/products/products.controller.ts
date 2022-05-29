@@ -12,7 +12,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
 import { ProductsService } from './products.service';
-
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
@@ -35,13 +36,15 @@ export class ProductsController {
   }
 
   @Post()
-  // @UseGuards(AuthGuard())
+  @UseGuards(RolesGuard(Role.Admin))
+  @UseGuards(AuthGuard())
   create(@Body() productDto: CreateProductDto): Promise<Product> {
     return this.productsService.createProduct(productDto);
   }
 
   @Put(':id')
-  // @UseGuards(AuthGuard())
+  @UseGuards(RolesGuard(Role.Admin))
+  @UseGuards(AuthGuard())
   updateProduct(
     @Param('id') id: number,
     @Body() productDto: CreateProductDto,
@@ -50,7 +53,8 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  // @UseGuards(AuthGuard())
+  @UseGuards(RolesGuard(Role.Admin))
+  @UseGuards(AuthGuard())
   deleteProduct(@Param('id') id: number) {
     return this.productsService.deleteProduct(id);
   }

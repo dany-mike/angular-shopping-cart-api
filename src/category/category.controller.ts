@@ -12,7 +12,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 @Controller('category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
@@ -28,12 +29,14 @@ export class CategoryController {
   }
 
   @Post()
+  @UseGuards(RolesGuard(Role.Admin))
   @UseGuards(AuthGuard())
   create(@Body() categoryDto: CreateCategoryDto): Promise<Category> {
     return this.categoryService.createCategory(categoryDto);
   }
 
   @Put(':id')
+  @UseGuards(RolesGuard(Role.Admin))
   @UseGuards(AuthGuard())
   updateCategory(
     @Param('id') id: number,
@@ -43,6 +46,7 @@ export class CategoryController {
   }
 
   @Delete(':id')
+  @UseGuards(RolesGuard(Role.Admin))
   @UseGuards(AuthGuard())
   deleteCategory(@Param('id') id: number) {
     return this.categoryService.deleteCategory(id);

@@ -6,6 +6,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { Role } from '../enums/role.enum';
 
 export class RegisterDto {
   @ApiProperty()
@@ -33,4 +34,37 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   lastname: string;
+}
+
+export class RegisterAdminDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty()
+  @MinLength(6)
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'Password is too weak: must have 1 upper case letter, 1 lower case letter, 1 number or special character',
+  })
+  password: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  firstname: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  lastname: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  role: Role;
 }

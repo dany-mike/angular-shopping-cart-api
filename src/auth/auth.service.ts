@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RegisterDto } from './dtos/register.dto';
+import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -19,6 +19,10 @@ export class AuthService {
     await this.usersRepository.createUser(registerDto);
   }
 
+  async createAdmin(registerAdminDto: RegisterAdminDto): Promise<void> {
+    await this.usersRepository.createAdminUser(registerAdminDto);
+  }
+
   async signIn(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = loginDto;
     const user = await this.usersRepository.findOne({ email });
@@ -26,7 +30,12 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
-      return { accessToken };
+      const userResponse = {
+        ...user,
+        accessToken,
+      };
+
+      return userResponse;
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
