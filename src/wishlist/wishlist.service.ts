@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
@@ -46,11 +50,17 @@ export class WishlistService {
     return products;
   }
 
-  // async getProductsByCategory(id: number) {
-  //   const products = await this.productsRepository.find({
-  //     where: { category: id },
-  //   });
+  async deleteWishlistItem(userId: number, productId: number) {
+    const wishlistItem = await this.wishlistRepository.findOne({
+      where: { userId, productId },
+    });
 
-  //   return products;
-  // }
+    if (!wishlistItem) {
+      throw new NotFoundException(
+        `Wishlist item with userId: ${userId} and productId: ${productId} not found`,
+      );
+    }
+
+    await this.wishlistRepository.delete(wishlistItem.id);
+  }
 }
