@@ -5,4 +5,8 @@ export class UploadImageDto {
   @ApiProperty()
   @IsNotEmpty()
   file: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  publicId: string;
 }
