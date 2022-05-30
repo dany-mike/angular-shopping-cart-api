@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
@@ -17,6 +17,18 @@ export class WishlistService {
     addToWishlistDto: AddToWishlistDto,
     userId: string,
   ): Promise<Wishlist> {
+    const { productId } = addToWishlistDto;
+    const wishlistItems = await this.wishlistRepository.find({
+      where: { userId },
+    });
+
+    wishlistItems.forEach((item) => {
+      if (item.productId === productId) {
+        throw new ConflictException(
+          `Product with id: ${productId} is already in the wishlist`,
+        );
+      }
+    });
     return this.wishlistRepository.addToWishlist(addToWishlistDto, userId);
   }
 
