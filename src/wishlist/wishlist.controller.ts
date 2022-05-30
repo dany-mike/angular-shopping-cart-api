@@ -25,7 +25,7 @@ export class WishlistController {
   deleteWishlistItem(
     @Param('userId') userId,
     @Param('productId') productId,
-  ): void {
-    this.wishlistService.deleteWishlistItem(userId, productId);
+  ): Promise<Wishlist> {
+    return this.wishlistService.deleteWishlistItem(userId, productId);
   }
 }

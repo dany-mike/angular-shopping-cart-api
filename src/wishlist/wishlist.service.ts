@@ -50,7 +50,10 @@ export class WishlistService {
     return products;
   }
 
-  async deleteWishlistItem(userId: number, productId: number) {
+  async deleteWishlistItem(
+    userId: number,
+    productId: number,
+  ): Promise<Wishlist> {
     const wishlistItem = await this.wishlistRepository.findOne({
       where: { userId, productId },
     });
@@ -62,5 +65,6 @@ export class WishlistService {
     }
 
     await this.wishlistRepository.delete(wishlistItem.id);
+    return wishlistItem;
   }
 }
