@@ -9,6 +9,8 @@ import { CategoryModule } from './category/category.module';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database.module';
 import { WishlistModule } from './wishlist/wishlist.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
 
 @Module({
   imports: [
@@ -28,8 +30,9 @@ import { WishlistModule } from './wishlist/wishlist.module';
       }),
     }),
     DatabaseModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryProvider],
 })
 export class AppModule {}
