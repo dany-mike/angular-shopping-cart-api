@@ -8,12 +8,14 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database.module';
+import { WishlistModule } from './wishlist/wishlist.module';
 
 @Module({
   imports: [
     ProductsModule,
     AuthModule,
     CategoryModule,
+    WishlistModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),

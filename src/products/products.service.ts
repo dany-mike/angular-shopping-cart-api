@@ -56,6 +56,12 @@ export class ProductsService {
     return result;
   }
 
+  async findProductsByIds(id: number[]): Promise<Product[]> {
+    const result = await this.productsRepository.findByIds(id);
+
+    return result;
+  }
+
   async getProductsByCategory(id: number) {
     const products = await this.productsRepository.find({
       where: { category: id },
