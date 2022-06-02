@@ -27,6 +27,7 @@ export class ShippingAddress {
   @Column()
   countryCode: string;
 
+  //   @Column()
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.id)
   user: User;
