@@ -39,4 +39,24 @@ export class AddressService {
 
     return user;
   }
+
+  async getShippingAddresses(userId: string) {
+    const user: User = await this.authService.getUserByid(userId);
+
+    return await this.shippingAddressRepository.find({
+      where: {
+        user,
+      },
+    });
+  }
+
+  async getBillingAddresses(userId: string) {
+    const user: User = await this.authService.getUserByid(userId);
+
+    return await this.billingAddressRepository.find({
+      where: {
+        user,
+      },
+    });
+  }
 }
