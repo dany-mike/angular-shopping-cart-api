@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { AddressDto } from './dto/address.dto';
@@ -23,5 +24,20 @@ export class ShippingAddressRepository extends Repository<ShippingAddress> {
 
     await this.save(shippingAddress);
     return shippingAddress;
+  };
+
+  updateShippingAddress = async (
+    id: number,
+    addressDto: AddressDto,
+  ): Promise<ShippingAddress> => {
+    const result = await this.findOne(id);
+
+    if (!result) {
+      throw new NotFoundException(`shipping address with id: ${id} not found`);
+    }
+    return this.save({
+      ...addressDto,
+      id: result.id,
+    });
   };
 }

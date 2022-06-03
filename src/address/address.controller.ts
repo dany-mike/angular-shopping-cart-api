@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { BillingAddress } from './billingAddress.entity';
 import { AddressDto } from './dto/address.dto';
@@ -30,5 +30,21 @@ export class AddressController {
     @Param('userId') userId: string,
   ): Promise<BillingAddress[]> {
     return this.addressService.getBillingAddresses(userId);
+  }
+
+  @Put('shipping/:id')
+  updateShippingAddress(
+    @Param('id') id: number,
+    @Body() addressDto: AddressDto,
+  ): Promise<ShippingAddress> {
+    return this.addressService.updateShippingAddress(id, addressDto);
+  }
+
+  @Put('billing/:id')
+  updateBillingAddress(
+    @Param('id') id: number,
+    @Body() addressDto: AddressDto,
+  ): Promise<BillingAddress> {
+    return this.addressService.updateBillingAddress(id, addressDto);
   }
 }

@@ -59,4 +59,18 @@ export class AddressService {
       },
     });
   }
+
+  updateShippingAddress(
+    id: number,
+    addressDto: AddressDto,
+  ): Promise<ShippingAddress> {
+    return this.shippingAddressRepository.updateShippingAddress(id, addressDto);
+  }
+
+  updateBillingAddress(
+    id: number,
+    addressDto: AddressDto,
+  ): Promise<BillingAddress> {
+    return this.billingAddressRepository.updateBillingAddress(id, addressDto);
+  }
 }
