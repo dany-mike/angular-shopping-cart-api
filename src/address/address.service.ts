@@ -18,6 +18,7 @@ export class AddressService {
     private authService: AuthService,
   ) {}
 
+  // TODO: add authorization here and below
   async addShippingAddress(addressDto: AddressDto): Promise<ShippingAddress> {
     const user = await this.getUser(addressDto);
     return this.shippingAddressRepository.addShippingAddress(addressDto, user);
@@ -60,6 +61,7 @@ export class AddressService {
     });
   }
 
+  // TODO: Add authorization here and below by creating a getUserByToken method in auth.controller.ts
   updateShippingAddress(
     id: number,
     addressDto: AddressDto,
