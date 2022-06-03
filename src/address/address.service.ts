@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
@@ -18,7 +22,6 @@ export class AddressService {
     private authService: AuthService,
   ) {}
 
-  // TODO: add authorization here and below
   async addShippingAddress(addressDto: AddressDto): Promise<ShippingAddress> {
     const user = await this.getUser(addressDto);
     return this.shippingAddressRepository.addShippingAddress(addressDto, user);
@@ -61,7 +64,6 @@ export class AddressService {
     });
   }
 
-  // TODO: Add authorization here and below by creating a getUserByToken method in auth.controller.ts
   updateShippingAddress(
     id: number,
     addressDto: AddressDto,
@@ -74,5 +76,29 @@ export class AddressService {
     addressDto: AddressDto,
   ): Promise<BillingAddress> {
     return this.billingAddressRepository.updateBillingAddress(id, addressDto);
+  }
+
+  async deleteBillingAddress(id: number): Promise<BillingAddress> {
+    const address = await this.billingAddressRepository.findOne(id);
+
+    if (!address) {
+      throw new NotFoundException(`Billing address with id: ${id} not found`);
+    }
+
+    await this.billingAddressRepository.delete(address.id);
+    return address;
+  }
+
+  async deleteShippingAddress(id: number): Promise<ShippingAddress> {
+    const address = await this.shippingAddressRepository.findOne({
+      where: { id: id },
+    });
+
+    if (!address) {
+      throw new NotFoundException(`Shipping address with id: ${id} not found`);
+    }
+
+    await this.shippingAddressRepository.delete(address.id);
+    return address;
   }
 }

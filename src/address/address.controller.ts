@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { AddressService } from './address.service';
 import { BillingAddress } from './billingAddress.entity';
 import { AddressDto } from './dto/address.dto';
@@ -8,6 +16,7 @@ import { ShippingAddress } from './shippingAddress.entity';
 export class AddressController {
   constructor(private addressService: AddressService) {}
 
+  // TODO: add authorization here and below
   @Post('shipping')
   addShippingAddress(@Body() addressDto: AddressDto): Promise<ShippingAddress> {
     return this.addressService.addShippingAddress(addressDto);
@@ -32,6 +41,7 @@ export class AddressController {
     return this.addressService.getBillingAddresses(userId);
   }
 
+  // TODO: Add authorization here and below by creating a getUserByToken method in auth.controller.ts
   @Put('shipping/:id')
   updateShippingAddress(
     @Param('id') id: number,
@@ -46,5 +56,15 @@ export class AddressController {
     @Body() addressDto: AddressDto,
   ): Promise<BillingAddress> {
     return this.addressService.updateBillingAddress(id, addressDto);
+  }
+
+  @Delete('shipping/:id')
+  deleteShippingAddress(@Param('id') id: number): Promise<ShippingAddress> {
+    return this.addressService.deleteShippingAddress(id);
+  }
+
+  @Delete('billing/:id')
+  deleteBillingAddress(@Param('id') id: number): Promise<BillingAddress> {
+    return this.addressService.deleteBillingAddress(id);
   }
 }
