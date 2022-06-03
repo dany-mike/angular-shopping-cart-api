@@ -1,9 +1,12 @@
+import { BillingAddress } from 'src/address/billingAddress.entity';
+import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Role } from './enums/role.enum';
 
@@ -43,4 +46,10 @@ export class User {
     default: Role.User,
   })
   role: Role;
+
+  @OneToMany(() => ShippingAddress, (shippingAddress) => shippingAddress.id)
+  shippingAddress: ShippingAddress[];
+
+  @OneToMany(() => BillingAddress, (billingAddress) => billingAddress.id)
+  billingAddress: BillingAddress[];
 }

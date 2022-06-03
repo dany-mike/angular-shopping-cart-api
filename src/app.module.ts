@@ -11,6 +11,7 @@ import { DatabaseModule } from './database.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
+import { AddressModule } from './address/address.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
     }),
     DatabaseModule,
     CloudinaryModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

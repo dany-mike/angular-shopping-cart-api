@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
 import { UploadImageDto } from './dto/uploadImage.dto';
 
+// TODO: Check if user role = admin
 @Controller('cloudinary')
 export class CloudinaryController {
   constructor(private cloudinaryService: CloudinaryService) {}

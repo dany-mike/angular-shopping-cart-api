@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { LoginDto } from './dtos/login.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,13 @@ export class AuthService {
 
   async createAdmin(registerAdminDto: RegisterAdminDto): Promise<void> {
     await this.usersRepository.createAdminUser(registerAdminDto);
+  }
+
+  async getUserByid(userId: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+    return user;
   }
 
   async signIn(loginDto: LoginDto): Promise<{ accessToken: string }> {

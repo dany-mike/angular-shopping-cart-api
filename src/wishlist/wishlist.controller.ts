@@ -8,6 +8,7 @@ import { WishlistService } from './wishlist.service';
 export class WishlistController {
   constructor(private wishlistService: WishlistService) {}
 
+  // TODO: check if role user here
   @Post(':userId')
   addToWishlist(
     @Body() wishlistDto: AddToWishlistDto,
@@ -16,11 +17,13 @@ export class WishlistController {
     return this.wishlistService.addToWishlist(wishlistDto, userId);
   }
 
+  // TODO: add authorization here check if my tokenUser === userId
   @Get(':userId')
   getWishlistProducts(@Param('userId') userId: string): Promise<Product[]> {
     return this.wishlistService.getWishlistProducts(userId);
   }
 
+  // TODO: add authorization here check if my tokenUser === userId
   @Delete(':userId/:productId')
   deleteWishlistItem(
     @Param('userId') userId,
