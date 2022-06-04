@@ -13,9 +13,7 @@ export class OrderRepository extends Repository<Order> {
     orderDto: OrderDto,
     user: User,
     totalPrice: number,
-    shippingAddress: ShippingAddress,
-    billingAddress: BillingAddress,
-    products: Product,
+    products: Product[],
     quantity: Quantity,
   ): Promise<Order> => {
     const { status } = orderDto;
@@ -23,8 +21,6 @@ export class OrderRepository extends Repository<Order> {
     const order = this.create({
       user,
       totalPrice,
-      shippingAddress,
-      billingAddress,
       products,
       status,
       quantity,

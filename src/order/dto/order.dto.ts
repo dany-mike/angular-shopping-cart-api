@@ -27,17 +27,22 @@ export class OrderDto {
   @IsNotEmpty()
   userToken: string;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  billingAddressId: number;
+  // @ApiProperty()
+  // @IsNumber()
+  // @IsNotEmpty()
+  // billingAddressId: number;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  shippingAddressId: number;
+  // @ApiProperty()
+  // @IsNumber()
+  // @IsNotEmpty()
+  // shippingAddressId: number;
 }
 export class OrderItemDto {
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  id: number;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

@@ -31,7 +31,7 @@ export class Order {
     joinColumn: { name: 'product_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'order_id', referencedColumnName: 'id' },
   })
-  products: Product;
+  products: Product[];
 
   @ApiProperty()
   @OneToMany(() => Quantity, (quantity) => quantity.id)
