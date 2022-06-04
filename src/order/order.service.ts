@@ -12,9 +12,19 @@ export class OrderService {
     private authService: AuthService,
   ) {}
   async createOrder(orderDto: OrderDto) {
-    const { userToken } = orderDto;
+    const { userToken, orderItems } = orderDto;
     const user = await this.authService.getUserByToken(userToken);
-    console.log(user);
-    return orderDto;
+    const totalPrice = await this.calcTotalPrice(orderItems);
+    // Calculate total price
+    // return this.orderRepository.createOrder(orderDto, user, totalPrice, );
+  }
+
+  private async calcTotalPrice(orderItems): Promise<number> {
+    let price = 0;
+    orderItems.forEach((item) => {
+      price += item.price;
+    });
+
+    return price;
   }
 }
