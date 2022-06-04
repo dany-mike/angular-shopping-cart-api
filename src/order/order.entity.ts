@@ -3,6 +3,7 @@ import { BillingAddress } from 'src/address/billingAddress.entity';
 import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
+import { Quantity } from 'src/quantity/quantity.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -10,6 +11,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 enum Status {
@@ -33,8 +35,9 @@ export class Order {
   })
   products: Product;
 
-  // Create a quantity table  with Many to one
-  // TODO: add a oneToMany relationship below
+  @ApiProperty()
+  @OneToMany(() => Quantity, (quantity) => quantity.id)
+  quantity: Quantity;
 
   @ApiProperty()
   @ManyToOne(() => BillingAddress, (billingAddress) => billingAddress.id)
