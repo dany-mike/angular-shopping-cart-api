@@ -21,6 +21,11 @@ export class OrderDto {
   @IsNotEmpty()
   @IsEnum(Status)
   status: Status;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userToken: string;
 }
 export class OrderItemDto {
   @ApiProperty()
@@ -42,9 +47,4 @@ export class OrderItemDto {
   @IsNumber()
   @IsNotEmpty()
   quantity: number;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
 }

@@ -6,12 +6,15 @@ import { OrderRepository } from './order.repository';
 
 @Injectable()
 export class OrderService {
-  //   constructor(
-  //     @InjectRepository()
-  //     private shippingAddressRepository: OrderRepository,
-  //   ) {}
-  createOrder(orderDto: OrderDto) {
-    //   this.authService.
+  constructor(
+    @InjectRepository(OrderRepository)
+    private orderRepository: OrderRepository,
+    private authService: AuthService,
+  ) {}
+  async createOrder(orderDto: OrderDto) {
+    const { userToken } = orderDto;
+    const user = await this.authService.getUserByToken(userToken);
+    console.log(user);
     return orderDto;
   }
 }

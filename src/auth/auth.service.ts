@@ -28,6 +28,9 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
     });
+
+    delete user.password;
+
     return user;
   }
 
@@ -40,6 +43,8 @@ export class AuthService {
       where: { email: decoded.email },
     });
 
+    delete user.password;
+
     return user;
   }
 
@@ -50,6 +55,7 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
+      delete user.password;
       const userResponse = {
         ...user,
         accessToken,
