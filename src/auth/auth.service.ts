@@ -31,6 +31,18 @@ export class AuthService {
     return user;
   }
 
+  async getUserByToken(token: string): Promise<User> {
+    const decoded = await this.jwtService.verify(token, {
+      secret: process.env.SECRET_KEY,
+    });
+
+    const user = await this.usersRepository.findOne({
+      where: { email: decoded.email },
+    });
+
+    return user;
+  }
+
   async signIn(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { email, password } = loginDto;
     const user = await this.usersRepository.findOne({ email });
