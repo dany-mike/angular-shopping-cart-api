@@ -14,7 +14,6 @@ export class OrderRepository extends Repository<Order> {
     user: User,
     totalPrice: number,
     products: Product[],
-    quantity: Quantity,
   ): Promise<Order> => {
     const { status } = orderDto;
 
@@ -23,10 +22,10 @@ export class OrderRepository extends Repository<Order> {
       totalPrice,
       products,
       status,
-      quantity,
     });
 
     await this.save(order);
+
     return order;
   };
 
