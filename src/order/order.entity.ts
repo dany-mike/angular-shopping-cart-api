@@ -14,18 +14,16 @@ import {
   OneToMany,
 } from 'typeorm';
 
-enum Status {
+export enum Status {
   CREATED = 'CREATED',
   COMPLETED = 'COMPLETED',
   PAID = 'PAID',
 }
-
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //   Many to many
   @ApiProperty()
   @ManyToMany(() => Product, { cascade: true })
   @JoinTable({
