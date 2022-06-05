@@ -1,11 +1,12 @@
+import { NotFoundException } from '@nestjs/common';
 import { BillingAddress } from 'src/address/billingAddress.entity';
 import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
 import { Quantity } from 'src/quantity/quantity.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { OrderDto } from './dto/order.dto';
-import { Order } from './order.entity';
+import { CompleteOrderDto, OrderDto } from './dto/order.dto';
+import { Order, Status } from './order.entity';
 
 @EntityRepository(Order)
 export class OrderRepository extends Repository<Order> {
@@ -29,18 +30,18 @@ export class OrderRepository extends Repository<Order> {
     return order;
   };
 
-  //   updateShippingAddress = async (
-  //     id: number,
-  //     order: order,
-  //   ): Promise<ShippingAddress> => {
-  //     const result = await this.findOne(id);
-
-  //     if (!result) {
-  //       throw new NotFoundException(`shipping address with id: ${id} not found`);
-  //     }
-  //     return this.save({
-  //       ...addressDto,
-  //       id: result.id,
-  //     });
-  //   };
+  completeOrder = async (
+    order: Order,
+    billingAddress: BillingAddress,
+    shippingAddress: ShippingAddress,
+    status: Status,
+  ): Promise<Order> => {
+    return this.save({
+      ...order,
+      billingAddress,
+      shippingAddress,
+      status,
+      id: order.id,
+    });
+  };
 }

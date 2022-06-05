@@ -26,17 +26,35 @@ export class OrderDto {
   @IsString()
   @IsNotEmpty()
   userToken: string;
-
-  // @ApiProperty()
-  // @IsNumber()
-  // @IsNotEmpty()
-  // billingAddressId: number;
-
-  // @ApiProperty()
-  // @IsNumber()
-  // @IsNotEmpty()
-  // shippingAddressId: number;
 }
+
+export class CompleteOrderDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  orderId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  billingAddressId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  shippingAddressId: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userToken: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  status: Status;
+}
+
 export class OrderItemDto {
   @ApiProperty()
   @IsNumber()
