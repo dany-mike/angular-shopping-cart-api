@@ -18,6 +18,7 @@ export enum Status {
   CREATED = 'CREATED',
   COMPLETED = 'COMPLETED',
   PAID = 'PAID',
+  CANCELED = 'CANCELED',
 }
 @Entity()
 export class Order {

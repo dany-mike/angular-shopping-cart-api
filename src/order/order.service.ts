@@ -6,13 +6,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
-import { BillingAddress } from 'src/address/billingAddress.entity';
-import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { ProductsService } from 'src/products/products.service';
 import { QuantityService } from 'src/quantity/quantity.service';
 import { CompleteOrderDto, OrderDto } from './dto/order.dto';
-import { Order } from './order.entity';
+import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
 
 @Injectable()
@@ -123,6 +121,17 @@ export class OrderService {
   async getCreatedOrder(created): Promise<Order> {
     return await this.orderRepository.findOne({
       where: { status: created },
+    });
+  }
+
+  async getUserCompletedOrders(
+    status: Status,
+    token: string,
+  ): Promise<Order[]> {
+    const user = await this.authService.getUserByToken(token);
+    const formattedStatus = status.toUpperCase();
+    return await this.orderRepository.find({
+      where: { status: formattedStatus, user },
     });
   }
 }

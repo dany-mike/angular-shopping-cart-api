@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CompleteOrderDto, OrderDto } from './dto/order.dto';
-import { Order } from './order.entity';
+import { Order, Status } from './order.entity';
 import { OrderService } from './order.service';
 
 @Controller('order')
@@ -15,5 +15,13 @@ export class OrderController {
   @Post('complete')
   completeOrder(@Body() completeOrderDto: CompleteOrderDto): Promise<Order> {
     return this.orderService.completeOrder(completeOrderDto);
+  }
+
+  @Get(':completed/:token')
+  getUserCompletedOrders(
+    @Param('completed') status: Status,
+    @Param('token') token: string,
+  ): Promise<Order[]> {
+    return this.orderService.getUserCompletedOrders(status, token);
   }
 }
