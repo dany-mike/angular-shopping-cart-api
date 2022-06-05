@@ -3,6 +3,7 @@ import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderService } from './order.service';
 
+// TODO: protect routes
 @Controller('order')
 export class OrderController {
   constructor(private orderService: OrderService) {}
