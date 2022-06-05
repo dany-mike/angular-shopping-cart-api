@@ -32,7 +32,7 @@ export class AddressService {
     return this.billingAddressRepository.addBillingAddress(addressDto, user);
   }
 
-  private async getUser(addressDto: AddressDto) {
+  private async getUser(addressDto: AddressDto): Promise<User> {
     const { userId } = addressDto;
 
     const user: User = await this.authService.getUserByid(userId);
@@ -44,7 +44,7 @@ export class AddressService {
     return user;
   }
 
-  async getShippingAddresses(userId: string) {
+  async getShippingAddresses(userId: string): Promise<ShippingAddress[]> {
     const user: User = await this.authService.getUserByid(userId);
 
     return await this.shippingAddressRepository.find({
@@ -54,7 +54,7 @@ export class AddressService {
     });
   }
 
-  async getBillingAddresses(userId: string) {
+  async getBillingAddresses(userId: string): Promise<BillingAddress[]> {
     const user: User = await this.authService.getUserByid(userId);
 
     return await this.billingAddressRepository.find({
@@ -62,6 +62,50 @@ export class AddressService {
         user,
       },
     });
+  }
+
+  async getBillingAddressById(
+    userId: string,
+    addressId: number,
+  ): Promise<BillingAddress> {
+    const user: User = await this.authService.getUserByid(userId);
+
+    const address = await this.billingAddressRepository.findOne({
+      where: {
+        user,
+        id: addressId,
+      },
+    });
+
+    if (!address) {
+      throw new NotFoundException(
+        `Billing address with id: ${addressId} not found`,
+      );
+    }
+
+    return address;
+  }
+
+  async getShippingAddressById(
+    userId: string,
+    addressId: number,
+  ): Promise<ShippingAddress> {
+    const user: User = await this.authService.getUserByid(userId);
+
+    const address = await this.shippingAddressRepository.findOne({
+      where: {
+        user,
+        id: addressId,
+      },
+    });
+
+    if (!address) {
+      throw new NotFoundException(
+        `Shipping address with id: ${addressId} not found`,
+      );
+    }
+
+    return address;
   }
 
   updateShippingAddress(

@@ -28,6 +28,23 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
     });
+
+    delete user.password;
+
+    return user;
+  }
+
+  async getUserByToken(token: string): Promise<User> {
+    const decoded = await this.jwtService.verify(token, {
+      secret: process.env.SECRET_KEY,
+    });
+
+    const user = await this.usersRepository.findOne({
+      where: { email: decoded.email },
+    });
+
+    delete user.password;
+
     return user;
   }
 
@@ -38,6 +55,7 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { email };
       const accessToken: string = await this.jwtService.sign(payload);
+      delete user.password;
       const userResponse = {
         ...user,
         accessToken,

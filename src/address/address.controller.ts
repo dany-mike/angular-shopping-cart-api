@@ -34,11 +34,27 @@ export class AddressController {
     return this.addressService.getShippingAddresses(userId);
   }
 
+  @Get('shipping/:userId/:addressId')
+  getShippingAddressById(
+    @Param('userId') userId: string,
+    @Param('addressId') addressId: number,
+  ): Promise<ShippingAddress> {
+    return this.addressService.getShippingAddressById(userId, addressId);
+  }
+
   @Get('billing/:userId')
   getBillingAddresses(
     @Param('userId') userId: string,
   ): Promise<BillingAddress[]> {
     return this.addressService.getBillingAddresses(userId);
+  }
+
+  @Get('billing/:userId/:addressId')
+  getBillingAddressById(
+    @Param('userId') userId: string,
+    @Param('addressId') addressId: number,
+  ): Promise<BillingAddress> {
+    return this.addressService.getBillingAddressById(userId, addressId);
   }
 
   // TODO: Add authorization here and below by creating a getUserByToken method in auth.controller.ts
