@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CompleteOrderDto, OrderDto } from './dto/order.dto';
+import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderService } from './order.service';
 
@@ -23,5 +23,10 @@ export class OrderController {
     @Param('token') token: string,
   ): Promise<Order[]> {
     return this.orderService.getUserCompletedOrders(status, token);
+  }
+
+  @Post('cancel')
+  cancelOrder(@Body() cancelOrderDto: CancelOrderDto): Promise<Order> {
+    return this.orderService.cancelOrder(cancelOrderDto);
   }
 }

@@ -9,7 +9,7 @@ import { AddressService } from 'src/address/address.service';
 import { AuthService } from 'src/auth/auth.service';
 import { ProductsService } from 'src/products/products.service';
 import { QuantityService } from 'src/quantity/quantity.service';
-import { CompleteOrderDto, OrderDto } from './dto/order.dto';
+import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
 
@@ -133,5 +133,15 @@ export class OrderService {
     return await this.orderRepository.find({
       where: { status: formattedStatus, user },
     });
+  }
+
+  async cancelOrder(cancelOrderDto: CancelOrderDto): Promise<Order> {
+    const { orderId, status } = cancelOrderDto;
+
+    const order = await this.getOrderById(orderId);
+
+    const canceledOrder = await this.orderRepository.cancelOrder(order, status);
+
+    return canceledOrder;
   }
 }

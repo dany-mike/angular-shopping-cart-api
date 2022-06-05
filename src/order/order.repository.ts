@@ -44,4 +44,12 @@ export class OrderRepository extends Repository<Order> {
       id: order.id,
     });
   };
+
+  cancelOrder = async (order: Order, status: Status): Promise<Order> => {
+    return this.save({
+      ...order,
+      status,
+      id: order.id,
+    });
+  };
 }
