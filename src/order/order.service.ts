@@ -136,9 +136,13 @@ export class OrderService {
   }
 
   async cancelOrder(cancelOrderDto: CancelOrderDto): Promise<Order> {
-    const { orderId, status } = cancelOrderDto;
+    const { orderId, status, userToken } = cancelOrderDto;
 
-    const order = await this.getOrderById(orderId);
+    const user = await this.authService.getUserByToken(userToken);
+
+    const order = await this.orderRepository.findOne({
+      where: { user, id: orderId },
+    });
 
     const canceledOrder = await this.orderRepository.cancelOrder(order, status);
 
