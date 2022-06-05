@@ -17,6 +17,6 @@ export class Quantity {
   product: Product;
 
   @ApiProperty()
-  @ManyToOne(() => Order, (order) => order.id)
+  @ManyToOne(() => Order, (order) => order.id, { onDelete: 'CASCADE' })
   order: Order;
 }

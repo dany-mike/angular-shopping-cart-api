@@ -6,6 +6,7 @@ import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { ProductsService } from 'src/products/products.service';
 import { QuantityService } from 'src/quantity/quantity.service';
+import { Not } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 import { Order } from './order.entity';
 import { OrderRepository } from './order.repository';
@@ -21,45 +22,54 @@ export class OrderService {
     @Inject(forwardRef(() => QuantityService))
     private quantityService: QuantityService,
   ) {}
-  async createOrder(orderDto: OrderDto): Promise<Order> {
+  async createOrder(orderDto: OrderDto): Promise<void> {
     const { userToken, orderItems } = orderDto;
 
     const user = await this.authService.getUserByToken(userToken);
 
-    const totalPrice = await this.calcTotalPrice(orderItems);
+    // check if an order has status created or completed if yes update order items of the order
+    const unpaidOrder = await this.getUnpaidOrder('PAID');
 
-    const itemsIds = orderItems.map((order) => order.id);
-
-    const products = await this.productsService.findProductsByIds(itemsIds);
-
-    const order = await this.orderRepository.createOrder(
-      orderDto,
-      user,
-      totalPrice,
-      products,
-    );
-
-    const orderId: number = order.id;
-
-    const formattedItems = orderItems.map((item) => {
-      const formattedItem = {
-        quantity: item.quantity,
-        orderId,
-        productId: item.id,
-      };
-
-      return formattedItem;
-    });
-
-    for await (const item of formattedItems) {
-      this.quantityService.addProductQuantity(
-        item.quantity,
-        item.orderId,
-        item.productId,
-      );
+    console.log(unpaidOrder);
+    if (unpaidOrder) {
+      //DELETE quantity order and order_product
+      this.orderRepository.delete(unpaidOrder.id);
     }
 
-    return order;
+    // const totalPrice = await this.calcTotalPrice(orderItems);
+
+    // const itemsIds = orderItems.map((order) => order.id);
+
+    // const products = await this.productsService.findProductsByIds(itemsIds);
+
+    // const order = await this.orderRepository.createOrder(
+    //   orderDto,
+    //   user,
+    //   totalPrice,
+    //   products,
+    // );
+
+    // const orderId: number = order.id;
+
+    // const formattedItems = orderItems.map((item) => {
+    //   const formattedItem = {
+    //     quantity: item.quantity,
+    //     orderId,
+    //     productId: item.id,
+    //   };
+
+    //   return formattedItem;
+    // });
+
+    // for await (const item of formattedItems) {
+    //   this.quantityService.addProductQuantity(
+    //     item.quantity,
+    //     item.orderId,
+    //     item.productId,
+    //   );
+    // }
+
+    // return order;
   }
 
   async getOrderById(id: number): Promise<Order> {
@@ -75,6 +85,12 @@ export class OrderService {
     });
 
     return price;
+  }
+
+  async getUnpaidOrder(paid): Promise<Order> {
+    return await this.orderRepository.findOne({
+      where: { status: Not(paid) },
+    });
   }
 
   async getShippingAddress(user, shippingAddressId): Promise<ShippingAddress> {

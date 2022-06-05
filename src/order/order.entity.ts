@@ -34,7 +34,7 @@ export class Order {
   products: Product[];
 
   @ApiProperty()
-  @OneToMany(() => Quantity, (quantity) => quantity.id)
+  @OneToMany(() => Quantity, (quantity) => quantity.id, { onDelete: 'CASCADE' })
   quantity: Quantity;
 
   @ApiProperty()
