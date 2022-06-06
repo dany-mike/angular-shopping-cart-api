@@ -39,11 +39,15 @@ export class Order {
   quantity: Quantity;
 
   @ApiProperty()
-  @ManyToOne(() => BillingAddress, (billingAddress) => billingAddress.id)
+  @ManyToOne(() => BillingAddress, (billingAddress) => billingAddress.id, {
+    onDelete: 'CASCADE',
+  })
   billingAddress: BillingAddress;
 
   @ApiProperty()
-  @ManyToOne(() => ShippingAddress, (shippingAddress) => shippingAddress.id)
+  @ManyToOne(() => ShippingAddress, (shippingAddress) => shippingAddress.id, {
+    onDelete: 'CASCADE',
+  })
   shippingAddress: ShippingAddress;
 
   @ApiProperty()
