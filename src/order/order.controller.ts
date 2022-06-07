@@ -26,7 +26,7 @@ export class OrderController {
     return this.orderService.getUserCompletedOrders(status, token);
   }
 
-  @Get('/summary/c/:id')
+  @Get('/summary/i/:id')
   getOrderSummary(@Param('id') id: number) {
     return this.orderService.getOrderSummary(id);
   }
