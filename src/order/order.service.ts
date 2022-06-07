@@ -109,6 +109,15 @@ export class OrderService {
     return order;
   }
 
+  async getOrderSummary(id: number) {
+    const orderSummary = await this.orderRepository.findOne({
+      relations: ['products'],
+      where: { id },
+    });
+
+    return orderSummary;
+  }
+
   private async calcTotalPrice(orderItems): Promise<number> {
     let price = 0;
     orderItems.forEach((item) => {

@@ -1,11 +1,9 @@
-import { NotFoundException } from '@nestjs/common';
 import { BillingAddress } from 'src/address/billingAddress.entity';
 import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
-import { Quantity } from 'src/quantity/quantity.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { CompleteOrderDto, OrderDto } from './dto/order.dto';
+import { OrderDto } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 
 @EntityRepository(Order)
