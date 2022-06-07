@@ -35,7 +35,11 @@ export class OrderService {
       await this.orderRepository.delete(createdOrder.id);
     }
 
-    const totalPrice = await this.calcTotalPrice(orderItems);
+    const totalPrice = this.calcTotalPrice(orderItems);
+
+    const subtotal = this.calcSubtotal(orderItems);
+
+    const tax = this.calcTotalPrice(orderItems) - this.calcSubtotal(orderItems);
 
     const itemsIds = orderItems.map((order) => order.id);
 
@@ -45,6 +49,8 @@ export class OrderService {
       orderDto,
       user,
       totalPrice,
+      subtotal,
+      tax,
       products,
     );
 
@@ -118,13 +124,24 @@ export class OrderService {
     return orderSummary;
   }
 
-  private async calcTotalPrice(orderItems): Promise<number> {
+  private calcTotalPrice(orderItems): number {
     let price = 0;
     orderItems.forEach((item) => {
       price += item.price * item.quantity;
     });
 
     return price;
+  }
+
+  private calc;
+
+  private calcSubtotal(orderItems): number {
+    let subtotalPrice = 0;
+    orderItems.forEach((item) => {
+      subtotalPrice += item.price * item.quantity * 0.8;
+    });
+
+    return subtotalPrice;
   }
 
   async getCreatedOrder(created): Promise<Order> {

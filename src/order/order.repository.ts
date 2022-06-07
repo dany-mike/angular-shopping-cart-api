@@ -12,6 +12,8 @@ export class OrderRepository extends Repository<Order> {
     orderDto: OrderDto,
     user: User,
     totalPrice: number,
+    subtotal: number,
+    tax: number,
     products: Product[],
   ): Promise<Order> => {
     const { status } = orderDto;
@@ -21,6 +23,8 @@ export class OrderRepository extends Repository<Order> {
       totalPrice,
       products,
       status,
+      subtotal,
+      tax,
     });
 
     await this.save(order);

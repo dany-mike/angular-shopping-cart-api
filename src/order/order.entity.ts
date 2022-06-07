@@ -59,6 +59,14 @@ export class Order {
   user: User;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'decimal' })
   totalPrice: number;
+
+  @ApiProperty()
+  @Column({ type: 'decimal' })
+  subtotal: number;
+
+  @ApiProperty()
+  @Column({ type: 'decimal' })
+  tax: number;
 }
