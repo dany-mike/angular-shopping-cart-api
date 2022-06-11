@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/category/category.entity';
 import { CategoryService } from 'src/category/category.service';
@@ -40,7 +36,7 @@ export class ProductsService {
     const products = await this.productsRepository.findProducts();
 
     if (!products) {
-      throw new NotFoundException('Products not found');
+      throw new BadRequestException('Products not found');
     }
 
     return products;
@@ -50,7 +46,7 @@ export class ProductsService {
     const result = await this.productsRepository.findOneProduct(id);
 
     if (!result) {
-      throw new NotFoundException(`Product with id: ${id} not found`);
+      throw new BadRequestException(`Product with id: ${id} not found`);
     }
 
     return result;
@@ -80,7 +76,7 @@ export class ProductsService {
     );
 
     if (!result) {
-      throw new NotFoundException(`Product with id: ${id} not found`);
+      throw new BadRequestException(`Product with id: ${id} not found`);
     }
 
     return result;
@@ -90,7 +86,7 @@ export class ProductsService {
     const result = await this.productsRepository.deleteProduct(id);
 
     if (!result) {
-      throw new NotFoundException(`Product with id: ${id} not found`);
+      throw new BadRequestException(`Product with id: ${id} not found`);
     }
   }
 }

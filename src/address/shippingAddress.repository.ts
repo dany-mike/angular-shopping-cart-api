@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { AddressDto } from './dto/address.dto';
@@ -33,7 +33,9 @@ export class ShippingAddressRepository extends Repository<ShippingAddress> {
     const result = await this.findOne(id);
 
     if (!result) {
-      throw new NotFoundException(`shipping address with id: ${id} not found`);
+      throw new BadRequestException(
+        `shipping address with id: ${id} not found`,
+      );
     }
     return this.save({
       ...addressDto,

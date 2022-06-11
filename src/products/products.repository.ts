@@ -2,7 +2,7 @@ import { Product } from './product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Category } from 'src/category/category.entity';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(Product)
 export class ProductsRepository extends Repository<Product> {
@@ -39,7 +39,7 @@ export class ProductsRepository extends Repository<Product> {
     const result = await this.findOne(id);
 
     if (!result) {
-      throw new NotFoundException(`product with id: ${id} not found`);
+      throw new BadRequestException(`product with id: ${id} not found`);
     }
     return this.save({
       ...createProductDto,

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
@@ -78,7 +74,7 @@ export class AddressService {
     });
 
     if (!address) {
-      throw new NotFoundException(
+      throw new BadRequestException(
         `Billing address with id: ${addressId} not found`,
       );
     }
@@ -100,7 +96,7 @@ export class AddressService {
     });
 
     if (!address) {
-      throw new NotFoundException(
+      throw new BadRequestException(
         `Shipping address with id: ${addressId} not found`,
       );
     }
@@ -126,7 +122,7 @@ export class AddressService {
     const address = await this.billingAddressRepository.findOne(id);
 
     if (!address) {
-      throw new NotFoundException(`Billing address with id: ${id} not found`);
+      throw new BadRequestException(`Billing address with id: ${id} not found`);
     }
 
     await this.billingAddressRepository.delete(address.id);
@@ -139,7 +135,9 @@ export class AddressService {
     });
 
     if (!address) {
-      throw new NotFoundException(`Shipping address with id: ${id} not found`);
+      throw new BadRequestException(
+        `Shipping address with id: ${id} not found`,
+      );
     }
 
     await this.shippingAddressRepository.delete(address.id);

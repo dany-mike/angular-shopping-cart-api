@@ -2,14 +2,20 @@ import {
   forwardRef,
   Inject,
   Injectable,
-  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
 import { AuthService } from 'src/auth/auth.service';
+import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
 import { QuantityService } from 'src/quantity/quantity.service';
-import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
+import {
+  CancelOrderDto,
+  CompleteOrderDto,
+  OrderDto,
+  OrderItemDto,
+} from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
 
@@ -27,9 +33,6 @@ export class OrderService {
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
 
-    // TODO IMPORTANT ! : Add if price not correspond at the product id throw an error
-    // if qty of an item = 0 throw an error
-
     const user = await this.authService.getUserByToken(userToken);
 
     const createdOrder = await this.getCreatedOrder('CREATED', user);
@@ -38,15 +41,17 @@ export class OrderService {
       await this.orderRepository.delete(createdOrder.id);
     }
 
+    const itemsIds = orderItems.map((order) => order.id);
+
+    const products = await this.productsService.findProductsByIds(itemsIds);
+
+    this.checkOrderItemsPrice(orderItems, products);
+
     const totalPrice = this.calcTotalPrice(orderItems);
 
     const subtotal = this.calcSubtotal(orderItems);
 
     const tax = this.calcTotalPrice(orderItems) - this.calcSubtotal(orderItems);
-
-    const itemsIds = orderItems.map((order) => order.id);
-
-    const products = await this.productsService.findProductsByIds(itemsIds);
 
     const order = await this.orderRepository.createOrder(
       orderDto,
@@ -77,10 +82,25 @@ export class OrderService {
       );
     }
 
-    const test = await this.quantityService.getProductsQuantity(orderId);
-    console.log(test);
-
     return order;
+  }
+
+  checkOrderItemsPrice(orderItems: OrderItemDto[], products: Product[]) {
+    const productsValidation: Product[] = products;
+
+    orderItems.forEach((item) => {
+      products.forEach((product, index) => {
+        if (item.price === product.price) {
+          productsValidation.splice(index, 1);
+        }
+      });
+    });
+
+    if (productsValidation.length === 0) {
+      throw new BadRequestException(
+        'Real products price does not match with localstorage items',
+      );
+    }
   }
 
   async completeOrder(completOrderDto: CompleteOrderDto): Promise<Order> {
@@ -109,13 +129,23 @@ export class OrderService {
     );
   }
 
+  validateQuantityItems(items: OrderItemDto[]) {
+    items.forEach((p) => {
+      if (p.quantity === 0) {
+        throw new BadRequestException(
+          'Quantity of an item cannot be equal to zero',
+        );
+      }
+    });
+  }
+
   async getOrderById(id: number): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id },
     });
 
     if (!order) {
-      throw new NotFoundException(`Order with id ${id} not found`);
+      throw new BadRequestException(`Order with id ${id} not found`);
     }
 
     return order;

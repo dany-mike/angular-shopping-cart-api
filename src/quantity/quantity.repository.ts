@@ -28,7 +28,7 @@ export class QuantityRepository extends Repository<Quantity> {
   //     const result = await this.findOne(id);
 
   //     if (!result) {
-  //       throw new NotFoundException(`shipping address with id: ${id} not found`);
+  //       throw new BadRequestException(`shipping address with id: ${id} not found`);
   //     }
   //     return this.save({
   //       ...addressDto,
