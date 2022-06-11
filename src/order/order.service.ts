@@ -96,7 +96,7 @@ export class OrderService {
       });
     });
 
-    if (productsValidation.length === 0) {
+    if (productsValidation.length !== 0) {
       throw new BadRequestException(
         'Real products price does not match with localstorage items',
       );
