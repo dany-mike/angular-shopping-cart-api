@@ -33,6 +33,8 @@ export class OrderService {
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
 
+    this.validateQuantityItems(orderItems);
+
     const user = await this.authService.getUserByToken(userToken);
 
     const createdOrder = await this.getCreatedOrder('CREATED', user);
