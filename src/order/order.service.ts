@@ -27,9 +27,12 @@ export class OrderService {
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
 
+    // TODO IMPORTANT ! : Add if price not correspond at the product id throw an error
+    // if qty of an item = 0 throw an error
+
     const user = await this.authService.getUserByToken(userToken);
 
-    const createdOrder = await this.getCreatedOrder('CREATED');
+    const createdOrder = await this.getCreatedOrder('CREATED', user);
 
     if (createdOrder) {
       await this.orderRepository.delete(createdOrder.id);
@@ -73,6 +76,9 @@ export class OrderService {
         item.productId,
       );
     }
+
+    const test = await this.quantityService.getProductsQuantity(orderId);
+    console.log(test);
 
     return order;
   }
@@ -133,8 +139,6 @@ export class OrderService {
     return price;
   }
 
-  private calc;
-
   private calcSubtotal(orderItems): number {
     let subtotalPrice = 0;
     orderItems.forEach((item) => {
@@ -144,9 +148,12 @@ export class OrderService {
     return subtotalPrice;
   }
 
-  async getCreatedOrder(created): Promise<Order> {
+  async getCreatedOrder(created, user): Promise<Order> {
     return await this.orderRepository.findOne({
-      where: { status: created },
+      where: {
+        status: created,
+        user,
+      },
     });
   }
 

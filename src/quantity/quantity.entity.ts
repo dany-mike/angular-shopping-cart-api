@@ -12,6 +12,7 @@ export class Quantity {
   @Column()
   quantity: number;
 
+  // Add many to many below
   @ApiProperty()
   @ManyToOne(() => Product, (product) => product.id)
   product: Product;

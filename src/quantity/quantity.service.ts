@@ -23,4 +23,14 @@ export class QuantityService {
     const order = await this.orderService.getOrderById(orderId);
     return this.quantityRepository.addProductQuantity(quantity, order, product);
   }
+
+  async getProductsQuantity(orderId: number): Promise<Quantity[]> {
+    const order = await this.orderService.getOrderById(orderId);
+    return await this.quantityRepository.find({
+      where: {
+        order,
+      },
+      relations: ['product'],
+    });
+  }
 }
