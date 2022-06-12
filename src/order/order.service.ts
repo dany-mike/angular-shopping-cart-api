@@ -45,9 +45,13 @@ export class OrderService {
 
     const itemsIds = orderItems.map((order) => order.id);
 
-    const products = await this.productsService.findProductsByIds(itemsIds);
+    const checkProducts = await this.productsService.findProductsByIds(
+      itemsIds,
+    );
 
-    this.checkOrderItemsPrice(orderItems, products);
+    this.checkOrderItemsPrice(orderItems, checkProducts);
+
+    const products = await this.productsService.findProductsByIds(itemsIds);
 
     const totalPrice = this.calcTotalPrice(orderItems);
 

@@ -43,21 +43,25 @@ export class AddressService {
   async getShippingAddresses(userId: string): Promise<ShippingAddress[]> {
     const user: User = await this.authService.getUserByid(userId);
 
-    return await this.shippingAddressRepository.find({
+    const shippingAddresses = await this.shippingAddressRepository.find({
       where: {
         user,
       },
     });
+
+    return shippingAddresses.reverse();
   }
 
   async getBillingAddresses(userId: string): Promise<BillingAddress[]> {
     const user: User = await this.authService.getUserByid(userId);
 
-    return await this.billingAddressRepository.find({
+    const billingAddresses = await this.billingAddressRepository.find({
       where: {
         user,
       },
     });
+
+    return billingAddresses.reverse();
   }
 
   async getBillingAddressById(
