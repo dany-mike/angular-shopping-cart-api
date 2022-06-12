@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
-import { Order, Status } from './order.entity';
+import { Order } from './order.entity';
 import { OrderService } from './order.service';
 
 // TODO: protect routes
@@ -18,12 +18,9 @@ export class OrderController {
     return this.orderService.completeOrder(completeOrderDto);
   }
 
-  @Get(':completed/:token')
-  getUserCompletedOrders(
-    @Param('completed') status: Status,
-    @Param('token') token: string,
-  ): Promise<Order[]> {
-    return this.orderService.getUserCompletedOrders(status, token);
+  @Get('c/all/:token')
+  getUserOrders(@Param('token') token: string): Promise<Order[]> {
+    return this.orderService.getUserOrders(token);
   }
 
   @Get('/summary/i/:id')

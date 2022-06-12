@@ -48,9 +48,7 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       where: { email: decoded.email },
     });
-
     delete user.password;
-
     return user;
   }
 
