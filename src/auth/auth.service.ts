@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { UsersRepository } from './users.repository';
@@ -7,6 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { LoginDto } from './dtos/login.dto';
 import { User } from './user.entity';
+import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UpdatePasswordDto } from './dtos/updatePassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -46,6 +52,36 @@ export class AuthService {
     delete user.password;
 
     return user;
+  }
+
+  async updateUserInfo(updateUserDto: UpdateUserDto): Promise<User> {
+    const { email, password, newEmail } = updateUserDto;
+
+    const isSameEmail = await this.usersRepository.findOne({
+      where: { email: newEmail },
+    });
+
+    if (isSameEmail) {
+      throw new BadGatewayException(`Email ${newEmail} already used`);
+    }
+
+    const user = await this.usersRepository.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return this.usersRepository.updateUser(user, updateUserDto);
+    } else {
+      throw new UnauthorizedException('Invalid password');
+    }
+  }
+
+  async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
+    const { email, password } = updatePasswordDto;
+    const user = await this.usersRepository.findOne({ email });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return this.usersRepository.updatePassword(user, updatePasswordDto);
+    } else {
+      throw new UnauthorizedException('Invalid password');
+    }
   }
 
   async signIn(loginDto: LoginDto): Promise<{ accessToken: string }> {
