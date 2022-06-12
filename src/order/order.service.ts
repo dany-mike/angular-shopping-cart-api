@@ -2,14 +2,20 @@ import {
   forwardRef,
   Inject,
   Injectable,
-  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
 import { AuthService } from 'src/auth/auth.service';
+import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
 import { QuantityService } from 'src/quantity/quantity.service';
-import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
+import {
+  CancelOrderDto,
+  CompleteOrderDto,
+  OrderDto,
+  OrderItemDto,
+} from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
 
@@ -27,24 +33,38 @@ export class OrderService {
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
 
+    this.validateQuantityItems(orderItems);
+
     const user = await this.authService.getUserByToken(userToken);
 
-    const createdOrder = await this.getCreatedOrder('CREATED');
+    const createdOrder = await this.getCreatedOrder('CREATED', user);
 
     if (createdOrder) {
       await this.orderRepository.delete(createdOrder.id);
     }
 
-    const totalPrice = await this.calcTotalPrice(orderItems);
-
     const itemsIds = orderItems.map((order) => order.id);
 
+    const checkProducts = await this.productsService.findProductsByIds(
+      itemsIds,
+    );
+
+    this.checkOrderItemsPrice(orderItems, checkProducts);
+
     const products = await this.productsService.findProductsByIds(itemsIds);
+
+    const totalPrice = this.calcTotalPrice(orderItems);
+
+    const subtotal = this.calcSubtotal(orderItems);
+
+    const tax = this.calcTotalPrice(orderItems) - this.calcSubtotal(orderItems);
 
     const order = await this.orderRepository.createOrder(
       orderDto,
       user,
       totalPrice,
+      subtotal,
+      tax,
       products,
     );
 
@@ -69,6 +89,24 @@ export class OrderService {
     }
 
     return order;
+  }
+
+  checkOrderItemsPrice(orderItems: OrderItemDto[], products: Product[]) {
+    const productsValidation: Product[] = products;
+
+    orderItems.forEach((item) => {
+      products.forEach((product, index) => {
+        if (item.price === product.price) {
+          productsValidation.splice(index, 1);
+        }
+      });
+    });
+
+    if (productsValidation.length !== 0) {
+      throw new BadRequestException(
+        'Real products price does not match with localstorage items',
+      );
+    }
   }
 
   async completeOrder(completOrderDto: CompleteOrderDto): Promise<Order> {
@@ -97,19 +135,38 @@ export class OrderService {
     );
   }
 
+  validateQuantityItems(items: OrderItemDto[]) {
+    items.forEach((p) => {
+      if (p.quantity === 0) {
+        throw new BadRequestException(
+          'Quantity of an item cannot be equal to zero',
+        );
+      }
+    });
+  }
+
   async getOrderById(id: number): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id },
     });
 
     if (!order) {
-      throw new NotFoundException(`Order with id ${id} not found`);
+      throw new BadRequestException(`Order with id ${id} not found`);
     }
 
     return order;
   }
 
-  private async calcTotalPrice(orderItems): Promise<number> {
+  async getOrderSummary(id: number) {
+    const orderSummary = await this.orderRepository.findOne({
+      relations: ['products'],
+      where: { id },
+    });
+
+    return orderSummary;
+  }
+
+  private calcTotalPrice(orderItems): number {
     let price = 0;
     orderItems.forEach((item) => {
       price += item.price * item.quantity;
@@ -118,9 +175,21 @@ export class OrderService {
     return price;
   }
 
-  async getCreatedOrder(created): Promise<Order> {
+  private calcSubtotal(orderItems): number {
+    let subtotalPrice = 0;
+    orderItems.forEach((item) => {
+      subtotalPrice += item.price * item.quantity * 0.8;
+    });
+
+    return subtotalPrice;
+  }
+
+  async getCreatedOrder(created, user): Promise<Order> {
     return await this.orderRepository.findOne({
-      where: { status: created },
+      where: {
+        status: created,
+        user,
+      },
     });
   }
 

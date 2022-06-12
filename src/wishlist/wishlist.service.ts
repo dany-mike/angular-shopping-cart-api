@@ -1,7 +1,7 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/product.entity';
@@ -59,7 +59,7 @@ export class WishlistService {
     });
 
     if (!wishlistItem) {
-      throw new NotFoundException(
+      throw new BadRequestException(
         `Wishlist item with userId: ${userId} and productId: ${productId} not found`,
       );
     }

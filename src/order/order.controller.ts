@@ -26,6 +26,11 @@ export class OrderController {
     return this.orderService.getUserCompletedOrders(status, token);
   }
 
+  @Get('/summary/i/:id')
+  getOrderSummary(@Param('id') id: number) {
+    return this.orderService.getOrderSummary(id);
+  }
+
   @Post('cancel')
   cancelOrder(@Body() cancelOrderDto: CancelOrderDto): Promise<Order> {
     return this.orderService.cancelOrder(cancelOrderDto);
