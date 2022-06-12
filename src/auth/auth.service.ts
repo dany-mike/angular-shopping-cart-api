@@ -1,8 +1,4 @@
-import {
-  BadGatewayException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { UsersRepository } from './users.repository';
@@ -52,16 +48,16 @@ export class AuthService {
     return user;
   }
 
-  async updateUserInfo(updateUserDto: UpdateUserDto): Promise<User> {
-    const { email, password, newEmail } = updateUserDto;
-
-    const isSameEmail = await this.usersRepository.findOne({
-      where: { email: newEmail },
+  async getUserById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
     });
+    delete user.password;
+    return user;
+  }
 
-    if (isSameEmail) {
-      throw new BadGatewayException(`Email ${newEmail} already used`);
-    }
+  async updateUserInfo(updateUserDto: UpdateUserDto): Promise<User> {
+    const { email, password } = updateUserDto;
 
     const user = await this.usersRepository.findOne({ email });
 

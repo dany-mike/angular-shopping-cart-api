@@ -51,4 +51,9 @@ export class AuthController {
   getUserByToken(@Param('token') token: string) {
     return this.authService.getUserByToken(token);
   }
+
+  @Get('user/:id')
+  getUserById(@Param('id') id: string) {
+    return this.authService.getUserById(id);
+  }
 }
