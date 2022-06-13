@@ -7,6 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { LoginDto } from './dtos/login.dto';
 import { User } from './user.entity';
+import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UpdatePasswordDto } from './dtos/updatePassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,10 +44,38 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       where: { email: decoded.email },
     });
-
     delete user.password;
-
     return user;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+    delete user.password;
+    return user;
+  }
+
+  async updateUserInfo(updateUserDto: UpdateUserDto): Promise<User> {
+    const { email, password } = updateUserDto;
+
+    const user = await this.usersRepository.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return this.usersRepository.updateUser(user, updateUserDto);
+    } else {
+      throw new UnauthorizedException('Invalid password');
+    }
+  }
+
+  async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
+    const { email, password } = updatePasswordDto;
+    const user = await this.usersRepository.findOne({ email });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return this.usersRepository.updatePassword(user, updatePasswordDto);
+    } else {
+      throw new UnauthorizedException('Invalid password');
+    }
   }
 
   async signIn(loginDto: LoginDto): Promise<{ accessToken: string }> {

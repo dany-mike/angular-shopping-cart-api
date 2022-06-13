@@ -6,6 +6,8 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserDto } from './dtos/updateUser.dto';
+import { UpdatePasswordDto } from './dtos/updatePassword.dto';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
@@ -57,4 +59,38 @@ export class UsersRepository extends Repository<User> {
       }
     }
   }
+  updateUser = async (
+    user: User,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User> => {
+    const { newEmail, password, firstname, lastname } = updateUserDto;
+
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    return this.save({
+      email: newEmail,
+      password: hashedPassword,
+      firstname,
+      lastname,
+      id: user.id,
+    });
+  };
+
+  updatePassword = async (
+    user: User,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> => {
+    const { newPassword } = updatePasswordDto;
+
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    return this.save({
+      password: hashedPassword,
+      id: user.id,
+    });
+  };
 }

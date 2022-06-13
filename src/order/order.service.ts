@@ -193,6 +193,11 @@ export class OrderService {
     });
   }
 
+  async getUserOrders(token: string): Promise<Order[]> {
+    const user = await this.authService.getUserByToken(token);
+    return await this.orderRepository.find({ user });
+  }
+
   async getUserCompletedOrders(
     status: Status,
     token: string,
