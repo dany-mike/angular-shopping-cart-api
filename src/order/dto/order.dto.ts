@@ -84,7 +84,6 @@ export class OrderItemDto {
   name: string;
 
   @ApiProperty()
-  @IsNumber()
   @IsNotEmpty()
   price: number;
 

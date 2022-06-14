@@ -16,7 +16,9 @@ export class Wishlist {
 
   @Column()
   @ApiProperty()
-  @ManyToOne(() => Product, (product) => product.category)
+  @ManyToOne(() => Product, (product) => product.id, {
+    onDelete: 'CASCADE',
+  })
   productId: number;
 
   @Column()
