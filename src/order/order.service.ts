@@ -1,15 +1,9 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
 import { AuthService } from 'src/auth/auth.service';
 import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
-import { QuantityService } from 'src/quantity/quantity.service';
 import {
   CancelOrderDto,
   CompleteOrderDto,
@@ -27,8 +21,6 @@ export class OrderService {
     private authService: AuthService,
     private addressService: AddressService,
     private productsService: ProductsService,
-    @Inject(forwardRef(() => QuantityService))
-    private quantityService: QuantityService,
   ) {}
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
@@ -49,9 +41,9 @@ export class OrderService {
       itemsIds,
     );
 
-    this.checkOrderItemsPrice(orderItems, checkProducts);
+    const products = checkProducts;
 
-    const products = await this.productsService.findProductsByIds(itemsIds);
+    this.checkOrderItemsPrice(orderItems, checkProducts);
 
     const totalPrice = this.calcTotalPrice(orderItems);
 
@@ -67,26 +59,6 @@ export class OrderService {
       tax,
       products,
     );
-
-    const orderId: number = order.id;
-
-    const formattedItems = orderItems.map((item) => {
-      const formattedItem = {
-        quantity: item.quantity,
-        orderId,
-        productId: item.id,
-      };
-
-      return formattedItem;
-    });
-
-    for await (const item of formattedItems) {
-      this.quantityService.addProductQuantity(
-        item.quantity,
-        item.orderId,
-        item.productId,
-      );
-    }
 
     return order;
   }
