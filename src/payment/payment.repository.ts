@@ -1,15 +1,14 @@
 import { BadRequestException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
-import { Payment } from './payment.entity';
+import { Payment, Status } from './payment.entity';
 
 @EntityRepository(Payment)
 export class PaymentRepository extends Repository<Payment> {
   createPaymentIntent = async (
     paymentDto: PaymentIntentDto,
+    status: Status,
   ): Promise<Payment> => {
-    const { status } = paymentDto;
-
     const paymentIntent = await this.create({
       status,
       paymentIntentId: '',
@@ -32,6 +31,27 @@ export class PaymentRepository extends Repository<Payment> {
     return this.save({
       status: result.status,
       paymentIntentId,
+      id: result.id,
+    });
+  };
+
+  updateStatus = async (event: any, status: Status): Promise<Payment> => {
+    const result = await this.findOne({
+      where: {
+        paymentIntentId: event.data.object.payment_intent,
+      },
+    });
+
+    console.log('RESULT', result);
+
+    if (!result) {
+      throw new BadRequestException(
+        `Payment intent id ${event.data.object.payment_intent} not found`,
+      );
+    }
+    return this.save({
+      status,
+      paymentIntentId: result.paymentIntentId,
       id: result.id,
     });
   };

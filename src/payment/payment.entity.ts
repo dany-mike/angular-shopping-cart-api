@@ -4,9 +4,9 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum Status {
   SUCCEEDED = 'SUCCEEDED',
+  PROCESSING = 'PROCESSING',
+  FAILED = 'FAILED',
   CREATED = 'CREATED',
-  COMPLETED = 'PROCESSING',
-  PAID = 'FAILED',
 }
 
 @Entity()
