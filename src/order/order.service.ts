@@ -41,9 +41,9 @@ export class OrderService {
       itemsIds,
     );
 
-    const products = checkProducts;
-
     this.checkOrderItemsPrice(orderItems, checkProducts);
+
+    const products = await this.productsService.findProductsByIds(itemsIds);
 
     const totalPrice = this.calcTotalPrice(orderItems);
 
