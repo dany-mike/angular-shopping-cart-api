@@ -42,6 +42,8 @@ export class PaymentRepository extends Repository<Payment> {
       },
     });
 
+    console.log(event.data.object.payment_intent);
+
     console.log('RESULT', result);
 
     if (!result) {

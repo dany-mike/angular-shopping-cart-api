@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OrderService } from 'src/order/order.service';
 import { Stripe } from 'stripe';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
+import { NotificationRepository } from './notification.repository';
 import { Payment, Status } from './payment.entity';
 import { PaymentRepository } from './payment.repository';
 
@@ -14,6 +15,8 @@ export class PaymentService {
     private orderService: OrderService,
     @InjectRepository(PaymentRepository)
     private paymentRepository: PaymentRepository,
+    @InjectRepository(NotificationRepository)
+    private notificationRepository: NotificationRepository,
   ) {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2020-08-27',
@@ -23,11 +26,15 @@ export class PaymentService {
   public async constructEventFromPayload(signature: string, payload: Buffer) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-    return this.stripe.webhooks.constructEvent(
+    const event = this.stripe.webhooks.constructEvent(
       payload,
       signature,
       webhookSecret,
     );
+
+    this.notificationRepository.createNotification(event);
+
+    return event;
   }
 
   async createPaymentIntent(
@@ -78,6 +85,7 @@ export class PaymentService {
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
+    return 'Success';
   }
 
   stripeFormattedPrice(order): number {
