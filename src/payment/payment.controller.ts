@@ -43,8 +43,6 @@ export class PaymentController {
       event = body;
     }
 
-    console.log(event);
-
     await this.paymentService.handleEvent(event);
   }
 }
