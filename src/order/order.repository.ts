@@ -54,4 +54,12 @@ export class OrderRepository extends Repository<Order> {
       id: order.id,
     });
   };
+
+  payOrder = async (order: Order, status: Status): Promise<Order> => {
+    return this.save({
+      ...order,
+      status,
+      id: order.id,
+    });
+  };
 }

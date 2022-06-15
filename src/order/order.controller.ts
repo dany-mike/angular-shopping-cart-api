@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CancelOrderDto, CompleteOrderDto, OrderDto } from './dto/order.dto';
+import {
+  CancelOrderDto,
+  CompleteOrderDto,
+  OrderDto,
+  PayOrderDto,
+} from './dto/order.dto';
 import { Order } from './order.entity';
 import { OrderService } from './order.service';
 
@@ -31,5 +36,10 @@ export class OrderController {
   @Post('cancel')
   cancelOrder(@Body() cancelOrderDto: CancelOrderDto): Promise<Order> {
     return this.orderService.cancelOrder(cancelOrderDto);
+  }
+
+  @Post('pay')
+  payOrder(@Body() payOrderDto: PayOrderDto): Promise<Order> {
+    return this.orderService.payOrder(payOrderDto);
   }
 }
