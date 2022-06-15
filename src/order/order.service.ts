@@ -208,8 +208,6 @@ export class OrderService {
       where: { user, id: orderId },
     });
 
-    console.log(order);
-
     if (order.status === Status.COMPLETE) {
       const paidOrder = await this.orderRepository.payOrder(order, Status.PAID);
       return paidOrder;
