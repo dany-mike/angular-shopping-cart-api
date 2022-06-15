@@ -12,7 +12,7 @@ export class Product {
   name: string;
 
   @ApiProperty()
-  @Column({ type: 'real' })
+  @Column({ type: 'decimal' })
   price: number;
 
   @ApiProperty()

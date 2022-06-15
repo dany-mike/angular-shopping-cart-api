@@ -13,7 +13,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
 import { AddressModule } from './address/address.module';
 import { OrderModule } from './order/order.module';
-import { QuantityModule } from './quantity/quantity.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ import { QuantityModule } from './quantity/quantity.module';
     CloudinaryModule,
     AddressModule,
     OrderModule,
-    QuantityModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

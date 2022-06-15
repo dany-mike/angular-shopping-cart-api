@@ -3,7 +3,6 @@ import { BillingAddress } from 'src/address/billingAddress.entity';
 import { ShippingAddress } from 'src/address/shippingAddress.entity';
 import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
-import { Quantity } from 'src/quantity/quantity.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,7 +10,6 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  OneToMany,
 } from 'typeorm';
 
 export enum Status {
@@ -33,10 +31,6 @@ export class Order {
     inverseJoinColumn: { name: 'order_id', referencedColumnName: 'id' },
   })
   products: Product[];
-
-  @ApiProperty()
-  @OneToMany(() => Quantity, (quantity) => quantity.id, { onDelete: 'CASCADE' })
-  quantity: Quantity;
 
   @ApiProperty()
   @ManyToOne(() => BillingAddress, (billingAddress) => billingAddress.id, {

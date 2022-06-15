@@ -18,6 +18,8 @@ export class Category {
 
   @ApiProperty()
   @ApiPropertyOptional()
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.category, {
+    onDelete: 'CASCADE',
+  })
   products: Product[];
 }
