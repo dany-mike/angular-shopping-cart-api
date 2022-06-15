@@ -52,6 +52,7 @@ export class CompleteOrderDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  @IsEnum(Status)
   status: Status;
 }
 
@@ -65,11 +66,18 @@ export class CancelOrderDto {
   @IsString()
   @IsNotEmpty()
   userToken: string;
+}
+
+export class PayOrderDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  orderId: number;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  status: Status;
+  userToken: string;
 }
 
 export class OrderItemDto {

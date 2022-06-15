@@ -70,6 +70,8 @@ export class PaymentService {
 
   async handleEvent(event) {
     switch (event.type) {
+      case 'payment_intent.created':
+        await this.setPaymentStatus(event, Status.CREATED);
       case 'payment_intent.succeeded':
         await this.setPaymentStatus(event, Status.PROCESSING);
         break;

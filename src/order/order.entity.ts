@@ -14,7 +14,7 @@ import {
 
 export enum Status {
   CREATED = 'CREATED',
-  COMPLETED = 'COMPLETED',
+  COMPLETE = 'COMPLETE',
   PAID = 'PAID',
   CANCELED = 'CANCELED',
 }

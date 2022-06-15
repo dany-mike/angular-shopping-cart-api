@@ -9,6 +9,7 @@ import {
   CompleteOrderDto,
   OrderDto,
   OrderItemDto,
+  PayOrderDto,
 } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
@@ -182,7 +183,7 @@ export class OrderService {
   }
 
   async cancelOrder(cancelOrderDto: CancelOrderDto): Promise<Order> {
-    const { orderId, status, userToken } = cancelOrderDto;
+    const { orderId, userToken } = cancelOrderDto;
 
     const user = await this.authService.getUserByToken(userToken);
 
@@ -190,8 +191,30 @@ export class OrderService {
       where: { user, id: orderId },
     });
 
-    const canceledOrder = await this.orderRepository.cancelOrder(order, status);
+    const canceledOrder = await this.orderRepository.cancelOrder(
+      order,
+      Status.CANCELED,
+    );
 
     return canceledOrder;
+  }
+
+  async payOrder(payOrderDto: PayOrderDto): Promise<Order> {
+    const { orderId, userToken } = payOrderDto;
+
+    const user = await this.authService.getUserByToken(userToken);
+
+    const order = await this.orderRepository.findOne({
+      where: { user, id: orderId },
+    });
+
+    console.log(order);
+
+    if (order.status === Status.COMPLETE) {
+      const paidOrder = await this.orderRepository.payOrder(order, Status.PAID);
+      return paidOrder;
+    }
+
+    throw new BadRequestException('Order has not been completed');
   }
 }
