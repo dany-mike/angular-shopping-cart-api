@@ -7,6 +7,7 @@ import { Payment } from './payment.entity';
 import { PaymentRepository } from './payment.repository';
 import { NotificationRepository } from './notification.repository';
 import { Notification } from './notification.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { Notification } from './notification.entity';
       NotificationRepository,
     ]),
     OrderModule,
+    AuthModule,
   ],
   providers: [PaymentService],
   controllers: [PaymentController],

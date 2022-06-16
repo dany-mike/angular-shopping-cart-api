@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AddressService } from 'src/address/address.service';
 import { AuthService } from 'src/auth/auth.service';
+import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
 import { ProductsService } from 'src/products/products.service';
 import {
@@ -86,9 +87,9 @@ export class OrderService {
     const { billingAddressId, orderId, shippingAddressId, userToken, status } =
       completOrderDto;
 
-    const order = await this.getOrderById(orderId);
-
     const user = await this.authService.getUserByToken(userToken);
+
+    const order = await this.getOrderById(orderId, user);
 
     const shippingAddress = await this.addressService.getShippingAddressById(
       user.id,
@@ -118,9 +119,9 @@ export class OrderService {
     });
   }
 
-  async getOrderById(id: number): Promise<Order> {
+  async getOrderById(id: number, user: User): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: { id },
+      where: { id, user },
     });
 
     if (!order) {
