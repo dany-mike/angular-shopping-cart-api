@@ -14,6 +14,8 @@ import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
 import { AddressModule } from './address/address.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -32,11 +34,21 @@ import { PaymentModule } from './payment/payment.module';
         SECRET_KEY: Joi.string().required(),
       }),
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.sendgrid.net',
+        auth: {
+          user: 'apikey',
+          pass: `${process.env.SENDGRID_API_KEY}`,
+        },
+      },
+    }),
     DatabaseModule,
     CloudinaryModule,
     AddressModule,
     OrderModule,
     PaymentModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],
