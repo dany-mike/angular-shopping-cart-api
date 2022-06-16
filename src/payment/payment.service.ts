@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from 'src/auth/auth.service';
 import { OrderService } from 'src/order/order.service';
 import { Stripe } from 'stripe';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
@@ -13,6 +14,7 @@ export class PaymentService {
 
   constructor(
     private orderService: OrderService,
+    private authService: AuthService,
     @InjectRepository(PaymentRepository)
     private paymentRepository: PaymentRepository,
     @InjectRepository(NotificationRepository)
@@ -40,8 +42,11 @@ export class PaymentService {
   async createPaymentIntent(
     paymentIntentDto: PaymentIntentDto,
   ): Promise<Payment> {
-    const { orderId } = paymentIntentDto;
-    const order = await this.orderService.getOrderById(orderId);
+    const { orderId, userToken } = paymentIntentDto;
+
+    const user = await this.authService.getUserByToken(userToken);
+
+    const order = await this.orderService.getOrderById(orderId, user);
 
     const payment = await this.paymentRepository.createPaymentIntent(
       paymentIntentDto,

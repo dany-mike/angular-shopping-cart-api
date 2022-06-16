@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PaymentIntentDto {
@@ -6,4 +6,9 @@ export class PaymentIntentDto {
   @IsNotEmpty()
   @IsNumber()
   orderId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  userToken: string;
 }

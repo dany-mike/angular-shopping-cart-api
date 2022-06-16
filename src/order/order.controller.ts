@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
 import {
   CancelOrderDto,
   CompleteOrderDto,
@@ -11,7 +12,10 @@ import { OrderService } from './order.service';
 // TODO: protect routes
 @Controller('order')
 export class OrderController {
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private authService: AuthService,
+  ) {}
 
   @Post()
   createOrder(@Body() orderDto: OrderDto): Promise<Order> {
@@ -36,6 +40,15 @@ export class OrderController {
   @Post('cancel')
   cancelOrder(@Body() cancelOrderDto: CancelOrderDto): Promise<Order> {
     return this.orderService.cancelOrder(cancelOrderDto);
+  }
+
+  @Get(':id/:userToken')
+  async getOrderById(
+    @Param('id') id: number,
+    @Param('userToken') userToken: string,
+  ): Promise<Order> {
+    const user = await this.authService.getUserByToken(userToken);
+    return this.orderService.getOrderById(id, user);
   }
 
   @Post('pay')
