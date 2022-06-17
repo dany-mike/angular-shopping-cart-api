@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AddressService } from 'src/address/address.service';
-import { InvoiceController } from './invoice.controller';
+import { InvoiceService } from './invoice.service';
 
 @Module({
-  controllers: [InvoiceController],
-  imports: [AddressService],
+  exports: [InvoiceService],
+  providers: [InvoiceService],
 })
 export class InvoiceModule {}
