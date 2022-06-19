@@ -78,6 +78,13 @@ export class UsersRepository extends Repository<User> {
     });
   };
 
+  saveResetToken = async (token: string, user: User): Promise<User> => {
+    return this.save({
+      ...user,
+      resetToken: token,
+    });
+  };
+
   updatePassword = async (
     user: User,
     updatePasswordDto: UpdatePasswordDto,

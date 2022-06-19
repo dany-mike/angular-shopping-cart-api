@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { UsersRepository } from './users.repository';
@@ -9,6 +13,8 @@ import { LoginDto } from './dtos/login.dto';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
+import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -95,5 +101,35 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<string> {
+    const { email } = forgotPasswordDto;
+
+    const user = await this.findUserByEmail(email);
+
+    return await this.saveResetToken(user);
+  }
+
+  async saveResetToken(user: User): Promise<string> {
+    const token = await this.generateToken();
+    this.usersRepository.saveResetToken(token, user);
+    return token;
+  }
+
+  async findUserByEmail(email): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid email');
+    }
+
+    return user;
+  }
+
+  async generateToken() {
+    return randomBytes(64).toString('hex');
   }
 }

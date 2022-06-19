@@ -15,6 +15,7 @@ import { Role } from './enums/role.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
+import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -55,5 +56,12 @@ export class AuthController {
   @Get('user/:id')
   getUserById(@Param('id') id: string) {
     return this.authService.getUserById(id);
+  }
+
+  @Post('/forgot-password')
+  forgotPassword(
+    @Body() forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<string> {
+    return this.authService.forgotPassword(forgotPasswordDto);
   }
 }
