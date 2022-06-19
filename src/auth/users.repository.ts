@@ -78,6 +78,13 @@ export class UsersRepository extends Repository<User> {
     });
   };
 
+  saveResetToken = async (token: string, user: User): Promise<User> => {
+    return this.save({
+      ...user,
+      resetToken: token,
+    });
+  };
+
   updatePassword = async (
     user: User,
     updatePasswordDto: UpdatePasswordDto,
@@ -87,6 +94,17 @@ export class UsersRepository extends Repository<User> {
     const salt = await bcrypt.genSalt(10);
 
     const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    return this.save({
+      password: hashedPassword,
+      id: user.id,
+    });
+  };
+
+  resetPassword = async (user: User, password: string): Promise<User> => {
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     return this.save({
       password: hashedPassword,

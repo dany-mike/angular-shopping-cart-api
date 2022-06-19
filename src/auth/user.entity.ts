@@ -24,6 +24,11 @@ export class User {
   @Column({ length: 255 })
   lastname: string;
 
+  @Column({
+    default: '0',
+  })
+  resetToken: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
