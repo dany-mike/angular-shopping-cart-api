@@ -1,5 +1,7 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
+import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { EmailService } from './email.service';
 
 @Controller('email')
@@ -12,5 +14,12 @@ export class EmailController {
     @Res() res: Response,
   ) {
     this.emailService.sendInvoice(userToken, orderId, res);
+  }
+
+  @Post('/forgot-password')
+  forgotPassword(
+    @Body() forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<IResetObject> {
+    return this.emailService.forgotPassword(forgotPasswordDto);
   }
 }

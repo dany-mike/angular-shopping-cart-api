@@ -100,4 +100,15 @@ export class UsersRepository extends Repository<User> {
       id: user.id,
     });
   };
+
+  resetPassword = async (user: User, password: string): Promise<User> => {
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    return this.save({
+      password: hashedPassword,
+      id: user.id,
+    });
+  };
 }

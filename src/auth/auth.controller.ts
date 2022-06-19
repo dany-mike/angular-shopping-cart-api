@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Put,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
@@ -15,7 +16,8 @@ import { Role } from './enums/role.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
-import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
+import { ResetPasswordDto } from './dtos/resetPassword.dto';
+import { User } from './user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -58,10 +60,11 @@ export class AuthController {
     return this.authService.getUserById(id);
   }
 
-  @Post('/forgot-password')
-  forgotPassword(
-    @Body() forgotPasswordDto: ForgotPasswordDto,
-  ): Promise<string> {
-    return this.authService.forgotPassword(forgotPasswordDto);
+  @Post('/reset-password')
+  resetPassword(
+    @Body() resetPassword: ResetPasswordDto,
+    @Query('token') token,
+  ): Promise<User> {
+    return this.authService.resetPassword(resetPassword, token);
   }
 }

@@ -13,15 +13,16 @@ import { LoginDto } from './dtos/login.dto';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
-import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
+import { ResetPasswordDto } from './dtos/resetPassword.dto';
 import { randomBytes } from 'crypto';
+import { IResetObject } from './interfaces/resetObject.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
-    private jwtService: JwtService,
+    private jwtService: JwtService, // private emailService: EmailService,
   ) {}
 
   async signUp(registerDto: RegisterDto): Promise<void> {
@@ -103,18 +104,21 @@ export class AuthService {
     }
   }
 
-  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<string> {
-    const { email } = forgotPasswordDto;
-
-    const user = await this.findUserByEmail(email);
-
-    return await this.saveResetToken(user);
-  }
-
-  async saveResetToken(user: User): Promise<string> {
+  async saveResetToken(user: User): Promise<IResetObject> {
     const token = await this.generateToken();
     this.usersRepository.saveResetToken(token, user);
-    return token;
+    const resetLink = `${process.env.FRONT_END_BASE_URL}/auth/reset?token=${token}`;
+
+    const res: IResetObject = {
+      token,
+      resetLink,
+    };
+
+    return res;
+  }
+
+  async generateToken() {
+    return randomBytes(64).toString('hex');
   }
 
   async findUserByEmail(email): Promise<User> {
@@ -129,7 +133,30 @@ export class AuthService {
     return user;
   }
 
-  async generateToken() {
-    return randomBytes(64).toString('hex');
+  async findUserByResetToken(resetToken: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { resetToken },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid token');
+    }
+
+    return user;
+  }
+
+  async resetPassword(
+    resetPasswordDto: ResetPasswordDto,
+    resetToken: string,
+  ): Promise<User> {
+    const { password, confirmPassword } = resetPasswordDto;
+
+    if (password !== confirmPassword) {
+      throw new BadRequestException('The 2 passwords must be same');
+    }
+
+    const user = await this.findUserByResetToken(resetToken);
+
+    return await this.usersRepository.resetPassword(user, password);
   }
 }
