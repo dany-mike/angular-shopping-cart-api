@@ -16,10 +16,10 @@ export class EmailController {
     this.emailService.sendInvoice(userToken, orderId, res);
   }
 
-  @Post('/forgot-password')
-  forgotPassword(
+  @Post('/reset-link')
+  sendResetPasswordLink(
     @Body() forgotPasswordDto: ForgotPasswordDto,
   ): Promise<IResetObject> {
-    return this.emailService.forgotPassword(forgotPasswordDto);
+    return this.emailService.sendResetPasswordLink(forgotPasswordDto);
   }
 }

@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
-import { User } from 'src/auth/user.entity';
 import { InvoiceService } from 'src/invoice/invoice.service';
 import { OrderService } from 'src/order/order.service';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
@@ -57,7 +56,7 @@ export class EmailService {
       .catch((err) => console.log(err));
   }
 
-  async forgotPassword(
+  async sendResetPasswordLink(
     forgotPasswordDto: ForgotPasswordDto,
   ): Promise<IResetObject> {
     const { email } = forgotPasswordDto;
@@ -66,20 +65,16 @@ export class EmailService {
 
     const resetObj: IResetObject = await this.authService.saveResetToken(user);
 
-    this.sendResetPasswordLink(resetObj.resetLink, user);
-
-    return resetObj;
-  }
-
-  async sendResetPasswordLink(resetLink: string, user: User) {
     await this.mailService.sendMail({
       to: user.email,
       from: 'ecommercedanymike@gmail.com',
       subject: `Reset password`,
       html: `
         <h3>Hello ${user.firstname}!</h3>
-        <p>Please use this <a href="${resetLink}">link</a> to reset your password.</p>
+        <p>Please use this <a href="${resetObj.resetLink}">link</a> to reset your password.</p>
     `,
     });
+
+    return resetObj;
   }
 }
