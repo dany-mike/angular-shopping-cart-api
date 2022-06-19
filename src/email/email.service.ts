@@ -36,7 +36,7 @@ export class EmailService {
         to: user.email,
         from: 'ecommercedanymike@gmail.com',
         subject: `Order n° ${orderId}`,
-        text: `Order n° ${orderId} has been created successfuly ! Order is on the way 🎉`,
+        text: `Thank you ${order.user.firstname} ! Order n° ${orderId} has been registered ! Order is on the way 🎉`,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         attachments: [

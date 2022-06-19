@@ -146,7 +146,7 @@ export class OrderService {
 
   async getOrderBillingAddress(id: number, user: User) {
     const orderBillingAddress = await this.orderRepository.findOne({
-      relations: ['billingAddress', 'products'],
+      relations: ['billingAddress', 'products', 'user'],
       where: { id, user },
     });
 
