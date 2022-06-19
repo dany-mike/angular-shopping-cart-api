@@ -16,6 +16,7 @@ import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { EmailModule } from './email/email.module';
     OrderModule,
     PaymentModule,
     EmailModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

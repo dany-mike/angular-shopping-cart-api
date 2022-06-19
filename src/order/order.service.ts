@@ -137,7 +137,24 @@ export class OrderService {
       where: { id },
     });
 
+    if (!orderSummary) {
+      throw new BadRequestException(`Order with id ${id} not found`);
+    }
+
     return orderSummary;
+  }
+
+  async getOrderBillingAddress(id: number, user: User) {
+    const orderBillingAddress = await this.orderRepository.findOne({
+      relations: ['billingAddress', 'products', 'user'],
+      where: { id, user },
+    });
+
+    if (!orderBillingAddress) {
+      throw new BadRequestException(`Order ${id} cannot be found`);
+    }
+
+    return orderBillingAddress;
   }
 
   private calcTotalPrice(orderItems): number {
