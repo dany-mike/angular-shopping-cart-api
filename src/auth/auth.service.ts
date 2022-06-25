@@ -64,9 +64,19 @@ export class AuthService {
   }
 
   async updateUserInfo(updateUserDto: UpdateUserDto): Promise<User> {
-    const { email, password } = updateUserDto;
+    const { email, password, newEmail } = updateUserDto;
 
     const user = await this.usersRepository.findOne({ email });
+
+    if (user.email !== newEmail) {
+      const emailExist = await this.usersRepository.findOne({
+        where: { email: newEmail },
+      });
+
+      if (emailExist) {
+        throw new BadRequestException('New email already already exist');
+      }
+    }
 
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.usersRepository.updateUser(user, updateUserDto);

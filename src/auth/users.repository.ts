@@ -108,6 +108,7 @@ export class UsersRepository extends Repository<User> {
 
     return this.save({
       password: hashedPassword,
+      resetToken: '0',
       id: user.id,
     });
   };

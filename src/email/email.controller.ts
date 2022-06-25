@@ -1,5 +1,16 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { EmailService } from './email.service';
@@ -8,6 +19,8 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private emailService: EmailService) {}
   @Get('invoice/:userToken/:orderId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   async sendInvoice(
     @Param('userToken') userToken: string,
     @Param('orderId') orderId: number,

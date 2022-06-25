@@ -1,15 +1,28 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 import { Product } from 'src/products/product.entity';
 import { AddToWishlistDto } from './dto/addToWishlist';
 import { Wishlist } from './wishlist.entity';
 import { WishlistService } from './wishlist.service';
 
+// TODO: Add acl
 @Controller('wishlist')
 export class WishlistController {
   constructor(private wishlistService: WishlistService) {}
 
-  // TODO: check if role user here
   @Post(':userId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   addToWishlist(
     @Body() wishlistDto: AddToWishlistDto,
     @Param('userId') userId: string,
@@ -17,14 +30,16 @@ export class WishlistController {
     return this.wishlistService.addToWishlist(wishlistDto, userId);
   }
 
-  // TODO: add authorization here check if my tokenUser === userId
   @Get(':userId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getWishlistProducts(@Param('userId') userId: string): Promise<Product[]> {
     return this.wishlistService.getWishlistProducts(userId);
   }
 
-  // TODO: add authorization here check if my tokenUser === userId
   @Delete(':userId/:productId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   deleteWishlistItem(
     @Param('userId') userId,
     @Param('productId') productId,
