@@ -5,7 +5,11 @@ import {
   Headers,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 import RequestWithRawBody from 'src/interface/requestWithRawBody.interface';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
 import { Payment } from './payment.entity';
@@ -16,6 +20,8 @@ export class PaymentController {
   constructor(private paymentService: PaymentService) {}
 
   @Post()
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   createPaymentIntent(@Body() orderId: PaymentIntentDto): Promise<Payment> {
     return this.paymentService.createPaymentIntent(orderId);
   }

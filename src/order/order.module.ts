@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressModule } from 'src/address/address.module';
 import { AuthModule } from 'src/auth/auth.module';

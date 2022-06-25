@@ -6,28 +6,38 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 import { AddressService } from './address.service';
 import { BillingAddress } from './billingAddress.entity';
 import { AddressDto } from './dto/address.dto';
 import { ShippingAddress } from './shippingAddress.entity';
 
+// TODO: add acl
 @Controller('address')
 export class AddressController {
   constructor(private addressService: AddressService) {}
 
-  // TODO: add authorization here and below
   @Post('shipping')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   addShippingAddress(@Body() addressDto: AddressDto): Promise<ShippingAddress> {
     return this.addressService.addShippingAddress(addressDto);
   }
 
   @Post('billing')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   addBillingAddress(@Body() addressDto: AddressDto): Promise<BillingAddress> {
     return this.addressService.addBillingAddress(addressDto);
   }
 
   @Get('shipping/:userId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getShippingAddresses(
     @Param('userId') userId: string,
   ): Promise<ShippingAddress[]> {
@@ -35,6 +45,8 @@ export class AddressController {
   }
 
   @Get('shipping/:userId/:addressId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getShippingAddressById(
     @Param('userId') userId: string,
     @Param('addressId') addressId: number,
@@ -43,6 +55,8 @@ export class AddressController {
   }
 
   @Get('billing/:userId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getBillingAddresses(
     @Param('userId') userId: string,
   ): Promise<BillingAddress[]> {
@@ -50,6 +64,8 @@ export class AddressController {
   }
 
   @Get('billing/:userId/:addressId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getBillingAddressById(
     @Param('userId') userId: string,
     @Param('addressId') addressId: number,
@@ -59,6 +75,8 @@ export class AddressController {
 
   // TODO: Add authorization here and below by creating a getUserByToken method in auth.controller.ts
   @Put('shipping/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   updateShippingAddress(
     @Param('id') id: number,
     @Body() addressDto: AddressDto,
@@ -67,6 +85,8 @@ export class AddressController {
   }
 
   @Put('billing/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   updateBillingAddress(
     @Param('id') id: number,
     @Body() addressDto: AddressDto,
@@ -75,11 +95,15 @@ export class AddressController {
   }
 
   @Delete('shipping/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   deleteShippingAddress(@Param('id') id: number): Promise<ShippingAddress> {
     return this.addressService.deleteShippingAddress(id);
   }
 
   @Delete('billing/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   deleteBillingAddress(@Param('id') id: number): Promise<BillingAddress> {
     return this.addressService.deleteBillingAddress(id);
   }

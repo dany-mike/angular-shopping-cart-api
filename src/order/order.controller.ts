@@ -1,5 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from 'src/auth/auth.service';
+import { Role } from 'src/auth/enums/role.enum';
+import RolesGuard from 'src/auth/guards/roles.guard';
 import {
   CancelOrderDto,
   CompleteOrderDto,
@@ -18,31 +21,43 @@ export class OrderController {
   ) {}
 
   @Post()
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   createOrder(@Body() orderDto: OrderDto): Promise<Order> {
     return this.orderService.createOrder(orderDto);
   }
 
   @Post('complete')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   completeOrder(@Body() completeOrderDto: CompleteOrderDto): Promise<Order> {
     return this.orderService.completeOrder(completeOrderDto);
   }
 
   @Get('c/all/:token')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getUserOrders(@Param('token') token: string): Promise<Order[]> {
     return this.orderService.getUserOrders(token);
   }
 
   @Get('/summary/i/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getOrderSummary(@Param('id') id: number) {
     return this.orderService.getOrderSummary(id);
   }
 
   @Post('cancel')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   cancelOrder(@Body() cancelOrderDto: CancelOrderDto): Promise<Order> {
     return this.orderService.cancelOrder(cancelOrderDto);
   }
 
   @Get(':id/:userToken')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   async getOrderById(
     @Param('id') id: number,
     @Param('userToken') userToken: string,
@@ -52,6 +67,8 @@ export class OrderController {
   }
 
   @Post('pay')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   payOrder(@Body() payOrderDto: PayOrderDto): Promise<Order> {
     return this.orderService.payOrder(payOrderDto);
   }

@@ -41,26 +41,36 @@ export class AuthController {
   }
 
   @Put('')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   updateUserInfo(@Body() updateUserDto: UpdateUserDto) {
     return this.authService.updateUserInfo(updateUserDto);
   }
 
   @Put('/password')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.authService.updatePassword(updatePasswordDto);
   }
 
   @Get(':token')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getUserByToken(@Param('token') token: string) {
     return this.authService.getUserByToken(token);
   }
 
   @Get('user/:id')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   getUserById(@Param('id') id: string) {
     return this.authService.getUserById(id);
   }
 
   @Post('/reset-password')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
   resetPassword(
     @Body() resetPassword: ResetPasswordDto,
     @Query('token') token,

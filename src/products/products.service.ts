@@ -18,7 +18,6 @@ export class ProductsService {
     const { categoryId } = createProductDto;
 
     let category: Category;
-    // TODO: Remove duplicate when I handle stocks
     if (categoryId) {
       category = await this.categoryService.getCategoryById(categoryId);
 
