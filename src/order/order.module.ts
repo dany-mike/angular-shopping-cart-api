@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressModule } from 'src/address/address.module';
 import { AuthModule } from 'src/auth/auth.module';
@@ -14,6 +15,7 @@ import { OrderService } from './order.service';
     AuthModule,
     AddressModule,
     ProductsModule,
+    PassportModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],
