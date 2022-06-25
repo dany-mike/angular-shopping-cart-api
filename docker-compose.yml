@@ -60,22 +60,5 @@ services:
         - .:/usr/src/app
         - /usr/src/app/node_modules
     restart: unless-stopped
-  # prod:
-  #   container_name: nestjs_ecommerce_api_prod
-  #   image: nestjs-ecommerce-api-prod:1.0.0
-  #   build:
-  #       context: .
-  #       target: production
-  #       dockerfile: ./Dockerfile
-  #   command: npm run start:prod
-  #   ports:
-  #       - 3000:3000
-  #       - 9229:9229
-  #   networks:
-  #       - nestjs-ecommerce-api
-  #   volumes:
-  #       - .:/usr/src/app
-  #       - /usr/src/app/node_modules
-  #   restart: unless-stopped
 networks:
   nestjs-ecommerce-api:
