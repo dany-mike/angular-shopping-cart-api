@@ -1,41 +1,81 @@
 version: "3"
 services:
   postgres:
-    container_name: postgres
+    container_name: nestjs_ecommerce_api_postgres
     image: postgres:latest
+    restart: always
     ports:
     - "5432:5432"
     volumes:
     - /data/postgres:/data/postgres
-    env_file:
-    - docker.env
     networks:
-    - postgres
+    - nestjs-ecommerce-api
     environment:
-      POSTGRES_PASSWORD: "admin"
-      POSTGRES_USER: "admin"
-      POSTGRES_DB: "nestjs_ecommerce"
- 
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_DB: "${POSTGRES_DB}"
   pgadmin:
     links:
     - postgres:postgres
     container_name: pgadmin
     image: dpage/pgadmin4
     ports:
-    - "8080:8080"
+    - "5555:80"
     depends_on:
-        -   postgres
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_LISTEN_PORT: 8080
+        - postgres
     volumes:
     - /data/pgadmin:/root/.pgadmin
-    env_file:
-    - docker.env
     networks:
-    - postgres
- 
+    - nestjs-ecommerce-api
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    restart: unless-stopped
+
+  dev:
+    container_name: nestjs_ecommerce_api_dev
+    links: 
+    - postgres:postgres
+    image: nestjs-ecommerce-api-dev:1.0.0
+    command: npm run start:debug
+    ports:
+        - 5000:5000
+        - 9229:9229
+    networks:
+        - nestjs-ecommerce-api
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PORT: ${PORT}
+      SECRET_KEY: ${SECRET_KEY}
+      CLOUD_NAME: ${CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      NODE_ENV: ${NODE_ENV}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      FRONT_END_BASE_URL: ${FRONT_END_BASE_URL}
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+  # prod:
+  #   container_name: nestjs_ecommerce_api_prod
+  #   image: nestjs-ecommerce-api-prod:1.0.0
+  #   build:
+  #       context: .
+  #       target: production
+  #       dockerfile: ./Dockerfile
+  #   command: npm run start:prod
+  #   ports:
+  #       - 3000:3000
+  #       - 9229:9229
+  #   networks:
+  #       - nestjs-ecommerce-api
+  #   volumes:
+  #       - .:/usr/src/app
+  #       - /usr/src/app/node_modules
+  #   restart: unless-stopped
 networks:
-  postgres:
-    driver: bridge
+  nestjs-ecommerce-api:

@@ -26,13 +26,16 @@ import { InvoiceModule } from './invoice/invoice.module';
     WishlistModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DB: Joi.string().required(),
-        PORT: Joi.number(),
+        SENDGRID_API_KEY: Joi.string().required(),
         SECRET_KEY: Joi.string().required(),
+        FRONT_END_BASE_URL: Joi.string().required(),
+        CLOUD_NAME: Joi.string().required(),
+        CLOUDINARY_API_KEY: Joi.string().required(),
+        CLOUDINARY_API_SECRET: Joi.string().required(),
+        NODE_ENV: Joi.string().required(),
+        STRIPE_SECRET_KEY: Joi.string().required(),
+        STRIPE_WEBHOOK_SECRET: Joi.string().required(),
+        DATABASE_URL: Joi.string().required(),
       }),
     }),
     MailerModule.forRoot({

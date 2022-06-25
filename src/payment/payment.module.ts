@@ -8,6 +8,7 @@ import { PaymentRepository } from './payment.repository';
 import { NotificationRepository } from './notification.repository';
 import { Notification } from './notification.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from 'src/auth/auth.module';
     ]),
     OrderModule,
     AuthModule,
+    PassportModule,
   ],
   providers: [PaymentService],
   controllers: [PaymentController],
