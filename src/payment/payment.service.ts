@@ -96,7 +96,8 @@ export class PaymentService {
   }
 
   stripeFormattedPrice(order): number {
-    return order.totalPrice * 100;
+    const stripeFormattedPrice: number = order.totalPrice * 100;
+    return Number(stripeFormattedPrice.toFixed(0));
   }
 
   async setPaymentStatus(event, status: Status) {
