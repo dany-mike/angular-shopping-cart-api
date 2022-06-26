@@ -69,8 +69,6 @@ export class AuthController {
   }
 
   @Post('/reset-password')
-  @UseGuards(RolesGuard(Role.User))
-  @UseGuards(AuthGuard())
   resetPassword(
     @Body() resetPassword: ResetPasswordDto,
     @Query('token') token,
