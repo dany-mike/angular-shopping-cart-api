@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { parse } from 'pg-connection-string';
 
 @Module({
   imports: [
@@ -13,6 +12,7 @@ import { parse } from 'pg-connection-string';
         url: configService.get('DATABASE_URL'),
         entities: ['dist/../**/*.entity.js'],
         synchronize: true,
+        // REMINDER: comment code below when dev mode
         ssl: true,
         extra: {
           ssl: {
