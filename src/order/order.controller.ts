@@ -11,6 +11,7 @@ import {
 } from './dto/order.dto';
 import { Order } from './order.entity';
 import { OrderService } from './order.service';
+import { OrderItem } from './orderItem.entity';
 
 // TODO: protect routes
 @Controller('order')
@@ -71,5 +72,12 @@ export class OrderController {
   @UseGuards(AuthGuard())
   payOrder(@Body() payOrderDto: PayOrderDto): Promise<Order> {
     return this.orderService.payOrder(payOrderDto);
+  }
+
+  @Get('order-item/i/:orderId')
+  @UseGuards(RolesGuard(Role.User))
+  @UseGuards(AuthGuard())
+  getOrderItemsByOrderId(@Param('orderId') orderId): Promise<OrderItem[]> {
+    return this.orderService.getOrderItemsByOrderId(orderId);
   }
 }

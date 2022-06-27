@@ -8,10 +8,11 @@ import { OrderController } from './order.controller';
 import { Order } from './order.entity';
 import { OrderRepository } from './order.repository';
 import { OrderService } from './order.service';
+import { OrderItemRepository } from './orderItem.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, OrderRepository]),
+    TypeOrmModule.forFeature([Order, OrderRepository, OrderItemRepository]),
     AuthModule,
     AddressModule,
     ProductsModule,

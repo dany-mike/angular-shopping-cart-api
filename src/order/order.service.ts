@@ -8,12 +8,15 @@ import { ProductsService } from 'src/products/products.service';
 import {
   CancelOrderDto,
   CompleteOrderDto,
+  CreateOrderItemsDto,
   OrderDto,
   OrderItemDto,
   PayOrderDto,
 } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
+import { OrderItem } from './orderItem.entity';
+import { OrderItemRepository } from './orderItem.repository';
 
 @Injectable()
 export class OrderService {
@@ -23,7 +26,10 @@ export class OrderService {
     private authService: AuthService,
     private addressService: AddressService,
     private productsService: ProductsService,
+    @InjectRepository(OrderItemRepository)
+    private orderItemRepository: OrderItemRepository,
   ) {}
+
   async createOrder(orderDto: OrderDto): Promise<Order> {
     const { userToken, orderItems } = orderDto;
 
@@ -61,6 +67,8 @@ export class OrderService {
       tax,
       products,
     );
+
+    await this.createOrderItems(orderItems, order.id);
 
     return order;
   }
@@ -232,5 +240,16 @@ export class OrderService {
     }
 
     throw new BadRequestException('Order has not been completed');
+  }
+
+  private async createOrderItems(
+    orderItems: OrderItemDto[],
+    orderId: number,
+  ): Promise<OrderItem[]> {
+    return this.orderItemRepository.createOrderItems(orderItems, orderId);
+  }
+
+  async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
+    return this.orderItemRepository.findOrderItemsByOrderId(orderId);
   }
 }
