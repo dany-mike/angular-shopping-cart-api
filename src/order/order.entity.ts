@@ -10,7 +10,9 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
+import { OrderItem } from './orderItem.entity';
 
 export enum Status {
   CREATED = 'CREATED',
@@ -43,6 +45,12 @@ export class Order {
     onDelete: 'CASCADE',
   })
   shippingAddress: ShippingAddress;
+
+  @ApiProperty()
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.id, {
+    onDelete: 'CASCADE',
+  })
+  orderItem: OrderItem;
 
   @ApiProperty()
   @Column()
