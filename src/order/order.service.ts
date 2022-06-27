@@ -14,6 +14,8 @@ import {
 } from './dto/order.dto';
 import { Order, Status } from './order.entity';
 import { OrderRepository } from './order.repository';
+import { OrderItem } from './orderItem.entity';
+import { OrderItemRepository } from './orderItem.repository';
 
 @Injectable()
 export class OrderService {
@@ -23,11 +25,14 @@ export class OrderService {
     private authService: AuthService,
     private addressService: AddressService,
     private productsService: ProductsService,
+    @InjectRepository(OrderItemRepository)
+    private orderItemRepository: OrderItemRepository,
   ) {}
-  async createOrder(orderDto: OrderDto): Promise<Order> {
-    const { userToken, orderItems } = orderDto;
 
-    this.validateQuantityItems(orderItems);
+  async createOrder(orderDto: OrderDto): Promise<Order> {
+    const { userToken, orderItemsDto } = orderDto;
+
+    this.validateQuantityItems(orderItemsDto);
 
     const user = await this.authService.getUserByToken(userToken);
 
@@ -37,21 +42,24 @@ export class OrderService {
       await this.orderRepository.delete(createdOrder.id);
     }
 
-    const itemsIds = orderItems.map((order) => order.id);
+    const itemsIds = orderItemsDto.map((order) => order.id);
 
     const checkProducts = await this.productsService.findProductsByIds(
       itemsIds,
     );
 
-    this.checkOrderItemsPrice(orderItems, checkProducts);
+    this.checkOrderItemsPrice(orderItemsDto, checkProducts);
 
     const products = await this.productsService.findProductsByIds(itemsIds);
 
-    const totalPrice = this.calcTotalPrice(orderItems);
+    const totalPrice = this.calcTotalPrice(orderItemsDto);
 
-    const subtotal = this.calcSubtotal(orderItems);
+    const subtotal = this.calcSubtotal(orderItemsDto);
 
-    const tax = this.calcTotalPrice(orderItems) - this.calcSubtotal(orderItems);
+    const tax =
+      this.calcTotalPrice(orderItemsDto) - this.calcSubtotal(orderItemsDto);
+
+    const orderItems = await this.createOrderItems(orderItemsDto);
 
     const order = await this.orderRepository.createOrder(
       orderDto,
@@ -60,6 +68,7 @@ export class OrderService {
       subtotal,
       tax,
       products,
+      orderItems,
     );
 
     return order;
@@ -133,7 +142,7 @@ export class OrderService {
 
   async getOrderSummary(id: number) {
     const orderSummary = await this.orderRepository.findOne({
-      relations: ['products'],
+      relations: ['products', 'orderItems'],
       where: { id },
     });
 
@@ -232,5 +241,15 @@ export class OrderService {
     }
 
     throw new BadRequestException('Order has not been completed');
+  }
+
+  private async createOrderItems(
+    orderItems: OrderItemDto[],
+  ): Promise<OrderItem[]> {
+    return this.orderItemRepository.createOrderItems(orderItems);
+  }
+
+  private async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
+    return this.orderItemRepository.findOrderItemsByOrderId(orderId);
   }
 }

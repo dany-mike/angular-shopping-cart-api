@@ -11,6 +11,7 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
+import { OrderItem } from './orderItem.entity';
 
 export enum Status {
   CREATED = 'CREATED',
@@ -43,6 +44,17 @@ export class Order {
     onDelete: 'CASCADE',
   })
   shippingAddress: ShippingAddress;
+
+  @ApiProperty()
+  @ManyToMany(() => OrderItem, (orderItem) => orderItem.id, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({
+    name: 'order_orderItems',
+    joinColumn: { name: 'orderItem_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'order_id', referencedColumnName: 'id' },
+  })
+  orderItems: OrderItem[];
 
   @ApiProperty()
   @Column()

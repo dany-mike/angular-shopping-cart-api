@@ -37,7 +37,25 @@ export class InvoiceService {
       doc.text('Subtotal: ' + Number(order.subtotal).toFixed(2) + '€', 150, y);
       y += 20;
       doc.text('Tax: ' + Number(order.tax).toFixed(2) + '€', 150, y);
-
+      y += 20;
+      doc.text('Products list: ', 100, y);
+      y += 20;
+      products.forEach((product) => {
+        doc.text(
+          'Id: ' +
+            product.id +
+            ' | Name: ' +
+            product.name +
+            ' | Price: ' +
+            Number(product.price).toFixed(2) +
+            '€ ' +
+            ' | Quantity: *' +
+            product.quantity,
+          150,
+          y,
+        );
+        y += 20;
+      });
       // TODO: add listing products in pdf v2
       doc.end();
       const buffer = [];

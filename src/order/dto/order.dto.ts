@@ -14,7 +14,7 @@ export class OrderDto {
   @ApiProperty()
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
-  orderItems: OrderItemDto[];
+  orderItemsDto: OrderItemDto[];
 
   @ApiProperty()
   @IsString()
