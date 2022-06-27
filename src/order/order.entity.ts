@@ -10,7 +10,6 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  OneToMany,
 } from 'typeorm';
 import { OrderItem } from './orderItem.entity';
 

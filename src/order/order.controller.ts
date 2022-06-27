@@ -11,7 +11,6 @@ import {
 } from './dto/order.dto';
 import { Order } from './order.entity';
 import { OrderService } from './order.service';
-import { OrderItem } from './orderItem.entity';
 
 // TODO: protect routes
 @Controller('order')
