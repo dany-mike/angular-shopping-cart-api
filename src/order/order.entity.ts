@@ -47,10 +47,15 @@ export class Order {
   shippingAddress: ShippingAddress;
 
   @ApiProperty()
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.id, {
+  @ManyToMany(() => OrderItem, (orderItem) => orderItem.id, {
     onDelete: 'CASCADE',
   })
-  orderItem: OrderItem;
+  @JoinTable({
+    name: 'order_orderItems',
+    joinColumn: { name: 'orderItem_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'order_id', referencedColumnName: 'id' },
+  })
+  orderItems: OrderItem[];
 
   @ApiProperty()
   @Column()

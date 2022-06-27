@@ -73,11 +73,4 @@ export class OrderController {
   payOrder(@Body() payOrderDto: PayOrderDto): Promise<Order> {
     return this.orderService.payOrder(payOrderDto);
   }
-
-  @Get('order-item/i/:orderId')
-  @UseGuards(RolesGuard(Role.User))
-  @UseGuards(AuthGuard())
-  getOrderItemsByOrderId(@Param('orderId') orderId): Promise<OrderItem[]> {
-    return this.orderService.getOrderItemsByOrderId(orderId);
-  }
 }

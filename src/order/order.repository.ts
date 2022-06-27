@@ -5,6 +5,7 @@ import { Product } from 'src/products/product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { OrderDto } from './dto/order.dto';
 import { Order, Status } from './order.entity';
+import { OrderItem } from './orderItem.entity';
 
 @EntityRepository(Order)
 export class OrderRepository extends Repository<Order> {
@@ -15,6 +16,7 @@ export class OrderRepository extends Repository<Order> {
     subtotal: number,
     tax: number,
     products: Product[],
+    orderItems: OrderItem[],
   ): Promise<Order> => {
     const { status } = orderDto;
 
@@ -25,6 +27,7 @@ export class OrderRepository extends Repository<Order> {
       status,
       subtotal,
       tax,
+      orderItems,
     });
 
     await this.save(order);

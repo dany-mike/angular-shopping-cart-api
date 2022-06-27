@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Order } from './order.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class OrderItem {
@@ -29,16 +28,4 @@ export class OrderItem {
   @IsNumber()
   @Column()
   quantity: number;
-
-  @ApiProperty()
-  @ApiPropertyOptional()
-  @IsNumber()
-  @Column()
-  orderId: number;
-
-  @ApiProperty()
-  @ManyToOne(() => Order, (order) => order.id, {
-    onDelete: 'CASCADE',
-  })
-  order: Order;
 }

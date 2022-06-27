@@ -6,7 +6,6 @@ import { OrderItem } from './orderItem.entity';
 export class OrderItemRepository extends Repository<OrderItem> {
   createOrderItems = async (
     orderItems: OrderItemDto[],
-    orderId: number,
   ): Promise<OrderItem[]> => {
     const orderItemsRes: OrderItem[] = [];
     for (const item of orderItems) {
@@ -15,7 +14,6 @@ export class OrderItemRepository extends Repository<OrderItem> {
         price: item.price,
         image: item.image ? item.image : '',
         quantity: item.quantity,
-        orderId,
       });
 
       await this.save(orderItem);

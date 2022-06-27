@@ -30,9 +30,9 @@ export class OrderService {
   ) {}
 
   async createOrder(orderDto: OrderDto): Promise<Order> {
-    const { userToken, orderItems } = orderDto;
+    const { userToken, orderItemsDto } = orderDto;
 
-    this.validateQuantityItems(orderItems);
+    this.validateQuantityItems(orderItemsDto);
 
     const user = await this.authService.getUserByToken(userToken);
 
@@ -42,21 +42,24 @@ export class OrderService {
       await this.orderRepository.delete(createdOrder.id);
     }
 
-    const itemsIds = orderItems.map((order) => order.id);
+    const itemsIds = orderItemsDto.map((order) => order.id);
 
     const checkProducts = await this.productsService.findProductsByIds(
       itemsIds,
     );
 
-    this.checkOrderItemsPrice(orderItems, checkProducts);
+    this.checkOrderItemsPrice(orderItemsDto, checkProducts);
 
     const products = await this.productsService.findProductsByIds(itemsIds);
 
-    const totalPrice = this.calcTotalPrice(orderItems);
+    const totalPrice = this.calcTotalPrice(orderItemsDto);
 
-    const subtotal = this.calcSubtotal(orderItems);
+    const subtotal = this.calcSubtotal(orderItemsDto);
 
-    const tax = this.calcTotalPrice(orderItems) - this.calcSubtotal(orderItems);
+    const tax =
+      this.calcTotalPrice(orderItemsDto) - this.calcSubtotal(orderItemsDto);
+
+    const orderItems = await this.createOrderItems(orderItemsDto);
 
     const order = await this.orderRepository.createOrder(
       orderDto,
@@ -65,9 +68,8 @@ export class OrderService {
       subtotal,
       tax,
       products,
+      orderItems,
     );
-
-    await this.createOrderItems(orderItems, order.id);
 
     return order;
   }
@@ -140,7 +142,7 @@ export class OrderService {
 
   async getOrderSummary(id: number) {
     const orderSummary = await this.orderRepository.findOne({
-      relations: ['products'],
+      relations: ['products', 'orderItems'],
       where: { id },
     });
 
@@ -243,12 +245,11 @@ export class OrderService {
 
   private async createOrderItems(
     orderItems: OrderItemDto[],
-    orderId: number,
   ): Promise<OrderItem[]> {
-    return this.orderItemRepository.createOrderItems(orderItems, orderId);
+    return this.orderItemRepository.createOrderItems(orderItems);
   }
 
-  async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
+  private async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
     return this.orderItemRepository.findOrderItemsByOrderId(orderId);
   }
 }
