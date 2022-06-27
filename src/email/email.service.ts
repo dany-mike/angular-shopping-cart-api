@@ -6,6 +6,7 @@ import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
 import { InvoiceService } from 'src/invoice/invoice.service';
 import { OrderService } from 'src/order/order.service';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
+import { SendInvoiceDto } from './dtos/sendInvoice.dto';
 
 @Injectable()
 export class EmailService {
@@ -16,14 +17,16 @@ export class EmailService {
     private orderService: OrderService,
   ) {}
 
-  async sendInvoice(userToken: string, orderId: number, res: Response) {
+  async sendInvoice(sendInvoiceDto: SendInvoiceDto, res: Response) {
+    const { userToken, orderId, orderItems } = sendInvoiceDto;
+
     const user = await this.authService.getUserByToken(userToken);
 
     const order = await this.orderService.getOrderBillingAddress(orderId, user);
 
     const invoice = await this.invoiceService.createInvoice(
       order.billingAddress,
-      order.products,
+      orderItems,
       order,
     );
 
