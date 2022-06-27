@@ -8,7 +8,6 @@ import { ProductsService } from 'src/products/products.service';
 import {
   CancelOrderDto,
   CompleteOrderDto,
-  CreateOrderItemsDto,
   OrderDto,
   OrderItemDto,
   PayOrderDto,
