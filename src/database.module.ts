@@ -13,12 +13,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: ['dist/../**/*.entity.js'],
         synchronize: true,
         // REMINDER: comment code below when dev mode
-        // ssl: true,
-        // extra: {
-        //   ssl: {
-        //     rejectUnauthorized: false,
-        //   },
-        // },
+        ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
   ],
