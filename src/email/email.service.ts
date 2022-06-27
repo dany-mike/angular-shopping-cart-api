@@ -18,7 +18,7 @@ export class EmailService {
   ) {}
 
   async sendInvoice(sendInvoiceDto: SendInvoiceDto, res: Response) {
-    const { userToken, orderId, orderItems } = sendInvoiceDto;
+    const { userToken, orderId, orderItemsDto } = sendInvoiceDto;
 
     const user = await this.authService.getUserByToken(userToken);
 
@@ -26,7 +26,7 @@ export class EmailService {
 
     const invoice = await this.invoiceService.createInvoice(
       order.billingAddress,
-      orderItems,
+      orderItemsDto,
       order,
     );
 

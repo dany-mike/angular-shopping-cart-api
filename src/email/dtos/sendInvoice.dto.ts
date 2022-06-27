@@ -21,5 +21,5 @@ export class SendInvoiceDto {
   @ApiProperty()
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
-  orderItems: OrderItemDto[];
+  orderItemsDto: OrderItemDto[];
 }
