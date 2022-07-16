@@ -45,8 +45,15 @@ export class CategoryService {
     return result;
   }
 
+  formatCategoryName(string): string {
+    const lowercaseString = string.toLowerCase();
+    return lowercaseString.replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
   async getCategoryByName(name: string): Promise<Category> {
-    const result = await this.categoryRepository.findOne({ name });
+    const result = await this.categoryRepository.findOne({
+      name: this.formatCategoryName(name),
+    });
 
     if (!result) {
       throw new BadRequestException(`Category with name: ${name} not found`);
