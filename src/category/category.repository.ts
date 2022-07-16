@@ -17,14 +17,6 @@ export class CategoryRepository extends Repository<Category> {
     return category;
   };
 
-  findOneCategory = async (id: number): Promise<Category> => {
-    return await this.findOne(id);
-  };
-
-  findCategories = async (): Promise<Category[]> => {
-    return await this.find();
-  };
-
   updateCategory = async (
     id: number,
     createCategoryDto: CreateCategoryDto,
