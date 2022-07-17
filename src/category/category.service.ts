@@ -26,7 +26,7 @@ export class CategoryService {
   }
 
   async getCategories(): Promise<Category[]> {
-    const products = await this.categoryRepository.findCategories();
+    const products = await this.categoryRepository.find();
 
     if (!products) {
       throw new BadRequestException('Categories not found');
@@ -36,10 +36,27 @@ export class CategoryService {
   }
 
   async getCategoryById(id: number): Promise<Category> {
-    const result = await this.categoryRepository.findOneCategory(id);
+    const result = await this.categoryRepository.findOne(id);
 
     if (!result) {
       throw new BadRequestException(`Category with id: ${id} not found`);
+    }
+
+    return result;
+  }
+
+  formatCategoryName(string): string {
+    const lowercaseString = string.toLowerCase();
+    return lowercaseString.replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  async getCategoryByName(name: string): Promise<Category> {
+    const result = await this.categoryRepository.findOne({
+      name: this.formatCategoryName(name),
+    });
+
+    if (!result) {
+      throw new BadRequestException(`Category with name: ${name} not found`);
     }
 
     return result;

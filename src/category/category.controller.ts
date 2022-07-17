@@ -28,6 +28,11 @@ export class CategoryController {
     return this.categoryService.getCategoryById(id);
   }
 
+  @Get('/n/:name')
+  getCategoryByName(@Param('name') name: string): any {
+    return this.categoryService.getCategoryByName(name);
+  }
+
   @Post()
   @UseGuards(RolesGuard(Role.Admin))
   @UseGuards(AuthGuard())
