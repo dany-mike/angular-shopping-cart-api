@@ -142,7 +142,7 @@ export class OrderService {
 
   async getOrderSummary(id: number) {
     const orderSummary = await this.orderRepository.findOne({
-      relations: ['products', 'orderItems'],
+      relations: ['products', 'orderItems', 'billingAddress'],
       where: { id },
     });
 
