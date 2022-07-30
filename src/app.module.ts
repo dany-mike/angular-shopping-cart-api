@@ -18,6 +18,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { CartController } from './cart/cart.controller';
+import { CartService } from './cart/cart.service';
 
 @Module({
   imports: [
@@ -57,6 +58,6 @@ import { CartController } from './cart/cart.controller';
     InvoiceModule,
   ],
   controllers: [AppController, CartController],
-  providers: [AppService, CloudinaryProvider],
+  providers: [AppService, CloudinaryProvider, CartService],
 })
 export class AppModule {}
