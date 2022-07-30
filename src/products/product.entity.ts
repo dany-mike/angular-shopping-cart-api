@@ -16,6 +16,10 @@ export class Product {
   price: number;
 
   @ApiProperty()
+  @Column()
+  quantity: number;
+
+  @ApiProperty()
   @ApiPropertyOptional()
   @Column()
   description: string;
