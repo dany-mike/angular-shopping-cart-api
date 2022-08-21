@@ -16,7 +16,7 @@ export class Product {
   price: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'integer' })
   quantity: number;
 
   @ApiProperty()

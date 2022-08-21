@@ -11,6 +11,10 @@ export class CreateProductDto {
   price: number;
 
   @ApiProperty()
+  @IsNotEmpty()
+  quantity: number;
+
+  @ApiProperty()
   @ApiPropertyOptional()
   @IsOptional()
   description: string;

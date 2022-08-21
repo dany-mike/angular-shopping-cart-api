@@ -10,7 +10,7 @@ export class ProductsRepository extends Repository<Product> {
     productDto: CreateProductDto,
     category?: Category,
   ): Promise<Product> => {
-    const { name, price, image, description } = productDto;
+    const { name, price, image, description, quantity } = productDto;
 
     const product = this.create({
       name,
@@ -18,6 +18,7 @@ export class ProductsRepository extends Repository<Product> {
       price,
       image: image ? image : '',
       category: category ? category : undefined,
+      quantity,
     });
 
     await this.save(product);
