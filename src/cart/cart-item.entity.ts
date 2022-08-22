@@ -17,6 +17,6 @@ export class CartItem {
   user: User;
 
   @ApiProperty()
-  @Column({ type: 'integer' })
+  @Column({ type: 'real' })
   quantity: number;
 }

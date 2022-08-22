@@ -3,10 +3,17 @@ import { CartItem } from './cart-item.entity';
 
 @EntityRepository(CartItem)
 export class CartItemRepository extends Repository<CartItem> {
-  createCartItem = async (quantity, product, user): Promise<CartItem> => {
+  createCartItem = async (
+    addedQuantity,
+    product,
+    user,
+    productQuantity,
+  ): Promise<CartItem> => {
     const cartItem = this.create({
-      quantity,
-      product,
+      product: {
+        quantity: productQuantity - addedQuantity,
+        ...product,
+      },
       user,
     });
 
@@ -19,9 +26,11 @@ export class CartItemRepository extends Repository<CartItem> {
     item: CartItem,
   ): Promise<CartItem> => {
     const updatedCartItem = this.create({
-      quantity,
       user: item.user,
-      product: item.product,
+      product: {
+        ...item.product,
+        quantity,
+      },
     });
     await this.save(updatedCartItem);
     return updatedCartItem;

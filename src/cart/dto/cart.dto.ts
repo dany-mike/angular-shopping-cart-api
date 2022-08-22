@@ -1,9 +1,9 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class AddProductDto {
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   addedQuantity: number;
 
@@ -13,7 +13,7 @@ export class AddProductDto {
   userId: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   productId: number;
 }

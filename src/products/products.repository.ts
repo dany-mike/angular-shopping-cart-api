@@ -25,6 +25,16 @@ export class ProductsRepository extends Repository<Product> {
     return product;
   };
 
+  updateProductQuantity = async (
+    updatedQuantity,
+    product,
+  ): Promise<Product> => {
+    return this.save({
+      ...product,
+      quantity: updatedQuantity,
+    });
+  };
+
   findOneProduct = async (id: number): Promise<Product> => {
     return this.findOne(id);
   };
