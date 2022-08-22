@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { CartItem } from './cart-item.entity';
 // import { CartItem } from './cart-item.entity';
 import { CartService } from './cart.service';
 import { AddProductDto } from './dto/cart.dto';
@@ -9,7 +10,7 @@ export class CartController {
 
   //   TODO: add type
   @Post()
-  addProduct(@Body() addProductDto: AddProductDto) {
+  addProduct(@Body() addProductDto: AddProductDto): Promise<CartItem> {
     return this.cartService.addProduct(addProductDto);
   }
 }

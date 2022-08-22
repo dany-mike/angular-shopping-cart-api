@@ -5,15 +5,15 @@ export class AddProductDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  quantity: string;
+  addedQuantity: number;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  userId: number;
+  userId: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  productId: string;
+  productId: number;
 }

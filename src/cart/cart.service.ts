@@ -1,16 +1,54 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AuthService } from 'src/auth/auth.service';
+import { ProductsService } from 'src/products/products.service';
+import { CartItem } from './cart-item.entity';
+import { CartItemRepository } from './cart-item.repository';
 // import { CartItem } from './cart-item.entity';
 import { AddProductDto } from './dto/cart.dto';
 
 @Injectable()
 export class CartService {
-  addProduct(addProductDto: AddProductDto) {
-    const { productId, userId, quantity } = addProductDto;
-    console.log('add product');
+  constructor(
+    @InjectRepository(CartItemRepository)
+    private cartItemRepository: CartItemRepository,
+    private productsService: ProductsService,
+    private authService: AuthService,
+  ) {}
 
-    // FindProductById
+  async findCartItemByUserAndProduct(user, product): Promise<CartItem> {
+    return this.cartItemRepository.findOne({
+      where: {
+        product,
+        user,
+      },
+    });
+  }
 
-    // FindCartItemByUserAndProduct
+  updateCartItemQuantity(addedQuantity, cartItem: CartItem): Promise<CartItem> {
+    const totalQty = cartItem.quantity + addedQuantity;
+    const updatedCartItem = this.cartItemRepository.updateCartItemQuantity(
+      totalQty,
+      cartItem,
+    );
+    return updatedCartItem;
+  }
+
+  createCartItem(addedQuantity, product, user): Promise<CartItem> {
+    return this.cartItemRepository.createCartItem(addedQuantity, product, user);
+  }
+
+  async addProduct(addProductDto: AddProductDto): Promise<CartItem> {
+    const { productId, userId, addedQuantity } = addProductDto;
+    const product = await this.productsService.getProductById(productId);
+    const user = await this.authService.getUserById(userId);
+    const cartItem = await this.findCartItemByUserAndProduct(product, user);
+
+    const result = cartItem
+      ? this.updateCartItemQuantity(addedQuantity, cartItem)
+      : this.createCartItem(addedQuantity, product, user);
+
+    return result;
   }
   // @Autowired
   // private CartItemRepository cartItemRepository;
