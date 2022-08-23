@@ -1,3 +1,5 @@
+import { User } from 'src/auth/user.entity';
+import { Product } from 'src/products/product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 
@@ -5,32 +7,31 @@ import { CartItem } from './cart-item.entity';
 export class CartItemRepository extends Repository<CartItem> {
   createCartItem = async (
     addedQuantity,
-    product,
-    user,
-    productQuantity,
+    product: Product,
+    user: User,
   ): Promise<CartItem> => {
     const cartItem = this.create({
-      product: {
-        quantity: productQuantity - addedQuantity,
-        ...product,
-      },
       user,
+      product: {
+        ...product,
+        quantity: product.quantity - addedQuantity,
+      },
+      quantity: addedQuantity,
     });
 
-    await this.save(product);
+    await this.save(cartItem);
     return cartItem;
   };
 
   updateCartItemQuantity = async (
-    quantity,
+    addedQuantity,
     item: CartItem,
   ): Promise<CartItem> => {
     const updatedCartItem = this.create({
+      id: item.id,
       user: item.user,
-      product: {
-        ...item.product,
-        quantity,
-      },
+      product: item.product,
+      quantity: item.quantity + addedQuantity,
     });
     await this.save(updatedCartItem);
     return updatedCartItem;

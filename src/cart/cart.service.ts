@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
+import { User } from 'src/auth/user.entity';
 import { Product } from 'src/products/product.entity';
 import { ProductsRepository } from 'src/products/products.repository';
 import { ProductsService } from 'src/products/products.service';
@@ -32,22 +33,23 @@ export class CartService {
     addedQuantity,
     cartItem: CartItem,
   ): Promise<CartItem> {
-    const totalQty = cartItem.quantity + addedQuantity;
     const updatedCartItem =
-      await this.cartItemRepository.updateCartItemQuantity(totalQty, cartItem);
+      await this.cartItemRepository.updateCartItemQuantity(
+        addedQuantity,
+        cartItem,
+      );
     return updatedCartItem;
   }
 
   async createCartItem(
     addedQuantity,
     product: Product,
-    user,
+    user: User,
   ): Promise<CartItem> {
     return await this.cartItemRepository.createCartItem(
       addedQuantity,
       product,
       user,
-      product.quantity,
     );
   }
 
