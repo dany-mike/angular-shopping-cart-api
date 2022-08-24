@@ -53,6 +53,20 @@ export class CartService {
     );
   }
 
+  async deleteUserCartItem(
+    userId: string,
+    productId: number,
+  ): Promise<CartItem> {
+    const user = await this.authService.getUserByid(userId);
+    const product = await this.productsService.getProductById(productId);
+    return await this.cartItemRepository.deleteUserCartItem(user, product);
+  }
+
+  async deleteUserCartItems(userId: string): Promise<CartItem[]> {
+    const user = await this.authService.getUserByid(userId);
+    return await this.cartItemRepository.deleteUserCartItems(user);
+  }
+
   async addProduct(addProductDto: AddProductDto): Promise<any> {
     const { productId, userId, addedQuantity } = addProductDto;
     const product = await this.productsService.getProductById(productId);

@@ -36,4 +36,21 @@ export class CartItemRepository extends Repository<CartItem> {
     await this.save(updatedCartItem);
     return updatedCartItem;
   };
+
+  deleteUserCartItems = async (user: User): Promise<CartItem[]> => {
+    this.delete({ user });
+    return await this.find({
+      where: { user },
+    });
+  };
+
+  deleteUserCartItem = async (
+    user: User,
+    product: Product,
+  ): Promise<CartItem> => {
+    this.delete({ user, product });
+    return await this.findOne({
+      where: { product, user },
+    });
+  };
 }
