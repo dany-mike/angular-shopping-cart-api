@@ -35,6 +35,15 @@ export class ProductsRepository extends Repository<Product> {
     });
   };
 
+  updateProductQuantities = async (products: Product[]): Promise<void> => {
+    for await (const product of products) {
+      this.save({
+        ...product,
+        quantity: product.quantity,
+      });
+    }
+  };
+
   findOneProduct = async (id: number): Promise<Product> => {
     return this.findOne(id);
   };

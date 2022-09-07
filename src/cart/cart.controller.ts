@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CartItem } from './cart-item.entity';
 // import { CartItem } from './cart-item.entity';
 import { CartService } from './cart.service';
@@ -7,6 +7,19 @@ import { AddProductDto } from './dto/cart.dto';
 @Controller('cart')
 export class CartController {
   constructor(private cartService: CartService) {}
+
+  @Get('/items/:userId/:productId')
+  getCartItem(
+    @Param('userId') userId: string,
+    @Param('productId') productId: number,
+  ) {
+    return this.cartService.getCartItem(userId, productId);
+  }
+
+  @Get('/items/:userId')
+  getCartItems(@Param('userId') userId: string) {
+    return this.cartService.getCartItems(userId);
+  }
 
   @Post()
   addProduct(@Body() addProductDto: AddProductDto): Promise<CartItem> {

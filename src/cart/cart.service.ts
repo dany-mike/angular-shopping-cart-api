@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/auth/user.entity';
@@ -24,6 +24,14 @@ export class CartService {
     return await this.cartItemRepository.findOne({
       where: {
         product,
+        user,
+      },
+    });
+  }
+
+  async findCartItemsByUser(user): Promise<CartItem[]> {
+    return await this.cartItemRepository.find({
+      where: {
         user,
       },
     });
@@ -59,15 +67,46 @@ export class CartService {
   ): Promise<CartItem> {
     const user = await this.authService.getUserByid(userId);
     const product = await this.productsService.getProductById(productId);
-    return await this.cartItemRepository.deleteUserCartItem(user, product);
+    const result = await this.cartItemRepository.deleteUserCartItem(
+      user,
+      product,
+    );
+
+    this.addDeletedCartItemInProductStock(
+      product.quantity + result.quantity,
+      product,
+    );
+
+    return result;
   }
 
-  async deleteUserCartItems(userId: string): Promise<CartItem[]> {
+  async getProductsCartItems(user: User) {
+    const productsCartItems = await this.cartItemRepository.find({
+      relations: ['product'],
+      where: { user },
+    });
+
+    if (!productsCartItems) {
+      throw new BadRequestException(`Products cannot be found`);
+    }
+
+    return productsCartItems;
+  }
+  async deleteUserCartItems(userId: string): Promise<void> {
     const user = await this.authService.getUserByid(userId);
-    return await this.cartItemRepository.deleteUserCartItems(user);
+    // const result = await this.cartItemRepository.deleteUserCartItems(user);
+    const cartItems: CartItem[] = await this.getProductsCartItems(user);
+
+    // WIP
+    // const products : Product[] = await
+    // console.log(cartItems);
+    // console.log(updatedProducts);
+
+    // await this.addDeletedCartItemsInProductStock(products);
+    // return result;
   }
 
-  async addProduct(addProductDto: AddProductDto): Promise<any> {
+  async addProduct(addProductDto: AddProductDto): Promise<CartItem> {
     const { productId, userId, addedQuantity } = addProductDto;
     const product = await this.productsService.getProductById(productId);
     const user = await this.authService.getUserById(userId);
@@ -80,6 +119,36 @@ export class CartService {
       : await this.createCartItem(addedQuantity, product, user);
 
     return result;
+  }
+
+  async getCartItem(userId, productId): Promise<CartItem> {
+    const product = await this.productsService.getProductById(productId);
+    const user = await this.authService.getUserById(userId);
+
+    return this.cartItemRepository.findOne({
+      where: { user, product },
+    });
+  }
+
+  async getCartItems(userId): Promise<CartItem[]> {
+    const user = await this.authService.getUserById(userId);
+    return this.cartItemRepository.find({
+      where: { user },
+    });
+  }
+
+  async addDeletedCartItemInProductStock(
+    updatedQuantity,
+    product,
+  ): Promise<void> {
+    await this.productsRepository.updateProductQuantity(
+      updatedQuantity,
+      product,
+    );
+  }
+
+  async addDeletedCartItemsInProductStock(updatedProducts): Promise<void> {
+    await this.productsRepository.updateProductQuantities(updatedProducts);
   }
 
   async updateProductQuantity(productId, addedQuantity): Promise<void> {
