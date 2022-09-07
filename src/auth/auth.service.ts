@@ -59,6 +59,11 @@ export class AuthService {
     const user = await this.usersRepository.findOne({
       where: { id },
     });
+
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+
     delete user.password;
     return user;
   }

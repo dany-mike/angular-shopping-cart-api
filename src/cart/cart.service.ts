@@ -67,17 +67,22 @@ export class CartService {
   ): Promise<CartItem> {
     const user = await this.authService.getUserByid(userId);
     const product = await this.productsService.getProductById(productId);
-    const result = await this.cartItemRepository.deleteUserCartItem(
-      user,
-      product,
-    );
 
-    this.addDeletedCartItemInProductStock(
-      product.quantity + result.quantity,
-      product,
-    );
+    const cartItem = await this.getCartItem(userId, productId);
 
-    return result;
+    if (cartItem) {
+      const result = await this.cartItemRepository.deleteUserCartItem(
+        user,
+        product,
+      );
+
+      this.addDeletedCartItemInProductStock(
+        product.quantity + result.quantity,
+        product,
+      );
+
+      return result;
+    }
   }
 
   async getProductsCartItems(user: User) {
@@ -94,16 +99,15 @@ export class CartService {
   }
   async deleteUserCartItems(userId: string): Promise<void> {
     const user = await this.authService.getUserByid(userId);
-    // const result = await this.cartItemRepository.deleteUserCartItems(user);
+    await this.cartItemRepository.deleteUserCartItems(user);
     const cartItems: CartItem[] = await this.getProductsCartItems(user);
 
-    // WIP
-    // const products : Product[] = await
-    // console.log(cartItems);
-    // console.log(updatedProducts);
+    const products: Product[] = cartItems.map((item) => {
+      item.product.quantity = item.product.quantity + item.quantity;
+      return item.product;
+    });
 
-    // await this.addDeletedCartItemsInProductStock(products);
-    // return result;
+    await this.addDeletedCartItemsInProductStock(products);
   }
 
   async addProduct(addProductDto: AddProductDto): Promise<CartItem> {
@@ -125,9 +129,15 @@ export class CartService {
     const product = await this.productsService.getProductById(productId);
     const user = await this.authService.getUserById(userId);
 
-    return this.cartItemRepository.findOne({
+    const cartItem = await this.cartItemRepository.findOne({
       where: { user, product },
     });
+
+    if (!cartItem) {
+      throw new BadRequestException(`Cart item not found`);
+    }
+
+    return cartItem;
   }
 
   async getCartItems(userId): Promise<CartItem[]> {
