@@ -10,7 +10,7 @@ export class ProductsRepository extends Repository<Product> {
     productDto: CreateProductDto,
     category?: Category,
   ): Promise<Product> => {
-    const { name, price, image, description } = productDto;
+    const { name, price, image, description, quantity } = productDto;
 
     const product = this.create({
       name,
@@ -18,10 +18,30 @@ export class ProductsRepository extends Repository<Product> {
       price,
       image: image ? image : '',
       category: category ? category : undefined,
+      quantity,
     });
 
     await this.save(product);
     return product;
+  };
+
+  updateProductQuantity = async (
+    updatedQuantity,
+    product,
+  ): Promise<Product> => {
+    return this.save({
+      ...product,
+      quantity: updatedQuantity,
+    });
+  };
+
+  updateProductQuantities = async (products: Product[]): Promise<void> => {
+    for await (const product of products) {
+      this.save({
+        ...product,
+        quantity: product.quantity,
+      });
+    }
   };
 
   findOneProduct = async (id: number): Promise<Product> => {
