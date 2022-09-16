@@ -33,27 +33,27 @@ export class CategoryController {
     return this.categoryService.getCategoryByName(name);
   }
 
-  @Post()
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  create(@Body() categoryDto: CreateCategoryDto): Promise<Category> {
-    return this.categoryService.createCategory(categoryDto);
-  }
+  // @Post()
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // create(@Body() categoryDto: CreateCategoryDto): Promise<Category> {
+  //   return this.categoryService.createCategory(categoryDto);
+  // }
 
-  @Put(':id')
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  updateCategory(
-    @Param('id') id: number,
-    @Body() categoryDto: CreateCategoryDto,
-  ): Promise<Category> {
-    return this.categoryService.updateCategory(id, categoryDto);
-  }
+  // @Put(':id')
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // updateCategory(
+  //   @Param('id') id: number,
+  //   @Body() categoryDto: CreateCategoryDto,
+  // ): Promise<Category> {
+  //   return this.categoryService.updateCategory(id, categoryDto);
+  // }
 
-  @Delete(':id')
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  deleteCategory(@Param('id') id: number) {
-    return this.categoryService.deleteCategory(id);
-  }
+  // @Delete(':id')
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // deleteCategory(@Param('id') id: number) {
+  //   return this.categoryService.deleteCategory(id);
+  // }
 }

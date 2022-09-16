@@ -35,27 +35,27 @@ export class ProductsController {
     return this.productsService.getProductsByCategory(categoryId);
   }
 
-  @Post()
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  create(@Body() productDto: CreateProductDto): Promise<Product> {
-    return this.productsService.createProduct(productDto);
-  }
+  // @Post()
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // create(@Body() productDto: CreateProductDto): Promise<Product> {
+  //   return this.productsService.createProduct(productDto);
+  // }
 
-  @Put(':id')
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  updateProduct(
-    @Param('id') id: number,
-    @Body() productDto: CreateProductDto,
-  ): Promise<Product> {
-    return this.productsService.updateProduct(id, productDto);
-  }
+  // @Put(':id')
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // updateProduct(
+  //   @Param('id') id: number,
+  //   @Body() productDto: CreateProductDto,
+  // ): Promise<Product> {
+  //   return this.productsService.updateProduct(id, productDto);
+  // }
 
-  @Delete(':id')
-  @UseGuards(RolesGuard(Role.Admin))
-  @UseGuards(AuthGuard())
-  deleteProduct(@Param('id') id: number) {
-    return this.productsService.deleteProduct(id);
-  }
+  // @Delete(':id')
+  // @UseGuards(RolesGuard(Role.Admin))
+  // @UseGuards(AuthGuard())
+  // deleteProduct(@Param('id') id: number) {
+  //   return this.productsService.deleteProduct(id);
+  // }
 }

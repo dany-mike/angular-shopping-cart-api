@@ -12,7 +12,7 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private emailService: EmailService) {}
   @Post('invoice')
-  @UseGuards(RolesGuard(Role.User))
+  // @UseGuards(RolesGuard(Role.User))
   @UseGuards(AuthGuard())
   async sendInvoice(
     @Body() sendInvoiceDto: SendInvoiceDto,

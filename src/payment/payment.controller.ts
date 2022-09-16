@@ -19,12 +19,12 @@ import { PaymentService } from './payment.service';
 export class PaymentController {
   constructor(private paymentService: PaymentService) {}
 
-  @Post()
-  @UseGuards(RolesGuard(Role.User))
-  @UseGuards(AuthGuard())
-  createPaymentIntent(@Body() orderId: PaymentIntentDto): Promise<Payment> {
-    return this.paymentService.createPaymentIntent(orderId);
-  }
+  // @Post()
+  // @UseGuards(RolesGuard(Role.User))
+  // @UseGuards(AuthGuard())
+  // createPaymentIntent(@Body() orderId: PaymentIntentDto): Promise<Payment> {
+  //   return this.paymentService.createPaymentIntent(orderId);
+  // }
 
   @Post('webhook')
   async handleIncomingEvents(

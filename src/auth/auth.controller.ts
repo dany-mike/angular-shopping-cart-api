@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterAdminDto, RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
-import RolesGuard from './guards/roles.guard';
+import RolesGuard, { Roles } from './guards/roles.guard';
 import { Role } from './enums/role.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dtos/updateUser.dto';
@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Post('createAdmin')
-  @UseGuards(RolesGuard(Role.SuperAdmin))
+  // @UseGuards(RolesGuard(Role.SuperAdmin))
   @UseGuards(AuthGuard())
   createAdmin(@Body() registerAdminDto: RegisterAdminDto): Promise<void> {
     return this.authService.createAdmin(registerAdminDto);
@@ -41,29 +41,29 @@ export class AuthController {
   }
 
   @Put('')
-  @UseGuards(RolesGuard(Role.User))
+  // @UseGuards(RolesGuard(Role.User))
   @UseGuards(AuthGuard())
   updateUserInfo(@Body() updateUserDto: UpdateUserDto) {
     return this.authService.updateUserInfo(updateUserDto);
   }
 
   @Put('/password')
-  @UseGuards(RolesGuard(Role.User))
+  // @UseGuards(RolesGuard(Role.User))
   @UseGuards(AuthGuard())
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.authService.updatePassword(updatePasswordDto);
   }
 
   @Get(':token')
-  @UseGuards(RolesGuard(Role.User))
+  // @UseGuards(RolesGuard(Role.User))
   @UseGuards(AuthGuard())
   getUserByToken(@Param('token') token: string) {
     return this.authService.getUserByToken(token);
   }
 
   @Get('user/:id')
-  @UseGuards(RolesGuard(Role.User))
-  @UseGuards(AuthGuard())
+  @Roles(Role.User, Role.Admin, Role.SuperAdmin)
+  @UseGuards(AuthGuard(), RolesGuard)
   getUserById(@Param('id') id: string) {
     return this.authService.getUserById(id);
   }
