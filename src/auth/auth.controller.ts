@@ -31,7 +31,7 @@ export class AuthController {
   @Post('createAdmin')
   // @UseGuards(RolesGuard(Role.SuperAdmin))
   @UseGuards(AuthGuard())
-  createAdmin(@Body() registerAdminDto: RegisterAdminDto): Promise<void> {
+  createAdmin(@Body() registerAdminDto: RegisterAdminDto): Promise<User> {
     return this.authService.createAdmin(registerAdminDto);
   }
 
@@ -52,6 +52,13 @@ export class AuthController {
   @UseGuards(AuthGuard())
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.authService.updatePassword(updatePasswordDto);
+  }
+
+  @Get('admin-users')
+  @Roles(Role.SuperAdmin)
+  @UseGuards(AuthGuard(), RolesGuard)
+  getUsers(): Promise<User[]> {
+    return this.authService.getUsers();
   }
 
   @Get(':token')

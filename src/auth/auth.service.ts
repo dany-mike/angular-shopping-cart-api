@@ -22,15 +22,15 @@ export class AuthService {
   constructor(
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
-    private jwtService: JwtService, // private emailService: EmailService,
+    private jwtService: JwtService,
   ) {}
 
   async signUp(registerDto: RegisterDto): Promise<void> {
     await this.usersRepository.createUser(registerDto);
   }
 
-  async createAdmin(registerAdminDto: RegisterAdminDto): Promise<void> {
-    await this.usersRepository.createAdminUser(registerAdminDto);
+  async createAdmin(registerAdminDto: RegisterAdminDto): Promise<User> {
+    return await this.usersRepository.createAdminUser(registerAdminDto);
   }
 
   async getUserByid(userId: string): Promise<User> {
@@ -41,6 +41,14 @@ export class AuthService {
     delete user.password;
 
     return user;
+  }
+
+  async getUsers(): Promise<User[]> {
+    const users = await this.usersRepository.find();
+
+    return users.filter(
+      (user) => user.role === 'superAdmin' || user.role === 'admin',
+    );
   }
 
   async getUserByToken(token: string): Promise<User> {
@@ -111,6 +119,7 @@ export class AuthService {
       const userResponse = {
         ...user,
         accessToken,
+        statusCode: 200,
       };
 
       return userResponse;

@@ -35,7 +35,7 @@ export class UsersRepository extends Repository<User> {
       }
     }
   }
-  async createAdminUser(registerAdminDto: RegisterAdminDto): Promise<void> {
+  async createAdminUser(registerAdminDto: RegisterAdminDto): Promise<User> {
     const { email, password, firstname, lastname, role } = registerAdminDto;
     const salt = await bcrypt.genSalt(10);
 
@@ -51,6 +51,7 @@ export class UsersRepository extends Repository<User> {
 
     try {
       await this.save(user);
+      return user;
     } catch (error) {
       if (error.code === '23505')
         throw new ConflictException(`Email: ${email} already exists`);
