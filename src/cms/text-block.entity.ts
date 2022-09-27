@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Page } from 'src/pages/page.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class TextBlock {
@@ -8,9 +9,14 @@ export class TextBlock {
 
   @ApiProperty()
   @Column()
-  title: string;
+  blockName: string;
 
   @ApiProperty()
   @Column()
   content: string;
+
+  @ApiProperty()
+  @ApiPropertyOptional()
+  @ManyToOne(() => Page, (page) => page.id)
+  page: Page;
 }

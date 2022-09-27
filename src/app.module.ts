@@ -9,8 +9,6 @@ import { CategoryModule } from './category/category.module';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database.module';
 import { WishlistModule } from './wishlist/wishlist.module';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
 import { AddressModule } from './address/address.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
@@ -20,6 +18,8 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { CartController } from './cart/cart.controller';
 import { CartModule } from './cart/cart.module';
 import { CmsModule } from './cms/cms.module';
+import { PagesController } from './pages/pages.controller';
+import { PagesService } from './pages/pages.service';
 
 @Module({
   imports: [
@@ -51,7 +51,6 @@ import { CmsModule } from './cms/cms.module';
       },
     }),
     DatabaseModule,
-    CloudinaryModule,
     AddressModule,
     OrderModule,
     PaymentModule,
@@ -60,7 +59,7 @@ import { CmsModule } from './cms/cms.module';
     CartModule,
     CmsModule,
   ],
-  controllers: [AppController, CartController],
-  providers: [AppService, CloudinaryProvider],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
