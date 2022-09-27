@@ -12,10 +12,6 @@ export class Page {
   name: string;
 
   @ApiProperty()
-  @Column()
-  content: string;
-
-  @ApiProperty()
   @OneToMany(() => TextBlock, (textBlock) => textBlock.id)
   textBlock: TextBlock;
 }
