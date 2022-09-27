@@ -19,6 +19,7 @@ import { EmailModule } from './email/email.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { CartController } from './cart/cart.controller';
 import { CartModule } from './cart/cart.module';
+import { CmsModule } from './cms/cms.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { CartModule } from './cart/cart.module';
     EmailModule,
     InvoiceModule,
     CartModule,
+    CmsModule,
   ],
   controllers: [AppController, CartController],
   providers: [AppService, CloudinaryProvider],
