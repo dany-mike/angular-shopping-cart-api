@@ -34,8 +34,11 @@ export class CmsService {
 
   async createTextBlock(
     createTextBlockDto: CreateTextBlockDto,
-    pageId: number,
   ): Promise<TextBlock> {
+    const { pageId, blockName } = createTextBlockDto;
+    if (await this.isBlockNameExist(blockName)) {
+      throw new BadRequestException(`Block name "${blockName}" must be unique`);
+    }
     const page = await this.pagesService.getPageById(pageId);
     return await this.textBlockRepository.createTextBlock(
       createTextBlockDto,
@@ -58,5 +61,19 @@ export class CmsService {
       createTextBlockDto,
       textBlock,
     );
+  }
+
+  async isBlockNameExist(blockName: string): Promise<boolean> {
+    const blocks = await this.textBlockRepository.find();
+
+    if (
+      blocks
+        .map((block) => block.blockName.toLowerCase())
+        .includes(blockName.toLowerCase())
+    ) {
+      return true;
+    }
+
+    return false;
   }
 }
