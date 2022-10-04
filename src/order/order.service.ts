@@ -1,10 +1,10 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddressService } from 'src/address/address.service';
-import { AuthService } from 'src/auth/auth.service';
-import { User } from 'src/auth/user.entity';
-import { Product } from 'src/products/product.entity';
-import { ProductsService } from 'src/products/products.service';
+import { AddressService } from '../address/address.service';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../auth/user.entity';
+import { Product } from '../products/product.entity';
+import { ProductsService } from '../products/products.service';
 import {
   CancelOrderDto,
   CompleteOrderDto,

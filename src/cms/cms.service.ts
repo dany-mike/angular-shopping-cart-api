@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PagesService } from 'src/pages/pages.service';
+import { PagesService } from '../pages/pages.service';
 import { CreateTextBlockDto } from './dto/create-text-block.dto';
 import { TextBlock } from './text-block.entity';
 import { TextBlockRepository } from './text-block.repository';

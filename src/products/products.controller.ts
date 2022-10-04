@@ -1,19 +1,19 @@
 import {
-  Body,
+  // Body,
   Controller,
-  Delete,
+  // Delete,
   Get,
   Param,
-  Post,
-  Put,
-  UseGuards,
+  // Post,
+  // Put,
+  // UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { CreateProductDto } from './dto/create-product.dto';
+// import { AuthGuard } from '@nestjs/passport';
+// import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
 import { ProductsService } from './products.service';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
+// import { Role } from '../auth/enums/role.enum';
+// import RolesGuard from '../auth/guards/roles.guard';
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}

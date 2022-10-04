@@ -5,7 +5,7 @@ import { AddressService } from './address.service';
 import { BillingAddress } from './billingAddress.entity';
 import { BillingAddressRepository } from './billingAddress.repository';
 import { ShippingAddress } from './shippingAddress.entity';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { ShippingAddressRepository } from './shippingAddress.repository';
 import { PassportModule } from '@nestjs/passport';
 

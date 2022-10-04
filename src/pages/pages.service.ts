@@ -5,8 +5,8 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CmsService } from 'src/cms/cms.service';
-import { TextBlock } from 'src/cms/text-block.entity';
+import { CmsService } from '../cms/cms.service';
+import { TextBlock } from '../cms/text-block.entity';
 import { CreatePageDto } from './dto/create-page.dto';
 import { Page } from './page.entity';
 import { PagesRepository } from './pages.repository';

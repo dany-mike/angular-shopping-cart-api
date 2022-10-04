@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { TextBlock } from 'src/cms/text-block.entity';
+import { TextBlock } from '../cms/text-block.entity';
 import { CreatePageDto } from './dto/create-page.dto';
 import { Page } from './page.entity';
 import { PagesService } from './pages.service';

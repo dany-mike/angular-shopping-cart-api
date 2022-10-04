@@ -1,5 +1,5 @@
-import { BillingAddress } from 'src/address/billingAddress.entity';
-import { ShippingAddress } from 'src/address/shippingAddress.entity';
+import { BillingAddress } from '../address/billingAddress.entity';
+import { ShippingAddress } from '../address/shippingAddress.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

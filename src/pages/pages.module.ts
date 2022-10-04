@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CmsModule } from 'src/cms/cms.module';
+import { CmsModule } from '../cms/cms.module';
 import { Page } from './page.entity';
 import { PagesController } from './pages.controller';
 import { PagesRepository } from './pages.repository';

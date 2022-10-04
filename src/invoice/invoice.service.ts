@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-// import { AddressService } from 'src/address/address.service';
+// import { AddressService } from '../'
 import * as PDFDocument from 'pdfkit';
-import { Order } from 'src/order/order.entity';
+import { Order } from '../order/order.entity';
 
 @Injectable()
 export class InvoiceService {

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
-import { Product } from 'src/products/product.entity';
-import { ProductsModule } from 'src/products/products.module';
-import { ProductsRepository } from 'src/products/products.repository';
+import { AuthModule } from '../auth/auth.module';
+import { Product } from '../products/product.entity';
+import { ProductsModule } from '../products/products.module';
+import { ProductsRepository } from '../products/products.repository';
 import { CartItem } from './cart-item.entity';
 import { CartItemRepository } from './cart-item.repository';
 import { CartController } from './cart.controller';

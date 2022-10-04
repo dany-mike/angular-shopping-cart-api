@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { AuthModule } from 'src/auth/auth.module';
-import { InvoiceModule } from 'src/invoice/invoice.module';
-import { OrderModule } from 'src/order/order.module';
+import { AuthModule } from '../auth/auth.module';
+import { InvoiceModule } from '../invoice/invoice.module';
+import { OrderModule } from '../order/order.module';
 import { EmailController } from './email.controller';
 import { EmailService } from './email.service';
 

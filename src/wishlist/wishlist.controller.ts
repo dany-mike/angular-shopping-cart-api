@@ -8,9 +8,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
-import { Product } from 'src/products/product.entity';
+import { Role } from '../auth/enums/role.enum';
+import RolesGuard from '../auth/guards/roles.guard';
+import { Product } from '../products/product.entity';
 import { AddToWishlistDto } from './dto/addToWishlist';
 import { Wishlist } from './wishlist.entity';
 import { WishlistService } from './wishlist.service';

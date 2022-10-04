@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/auth/auth.service';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
+import { AuthService } from '../auth/auth.service';
+import { Role } from '../auth/enums/role.enum';
+import RolesGuard from '../auth/guards/roles.guard';
 import {
   CancelOrderDto,
   CompleteOrderDto,

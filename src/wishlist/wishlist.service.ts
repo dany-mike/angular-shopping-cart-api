@@ -4,8 +4,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/products/product.entity';
-import { ProductsService } from 'src/products/products.service';
+import { Product } from '../products/product.entity';
+import { ProductsService } from '../products/products.service';
 import { AddToWishlistDto } from './dto/addToWishlist';
 import { Wishlist } from './wishlist.entity';
 import { WishlistRepository } from './wishlist.repository';

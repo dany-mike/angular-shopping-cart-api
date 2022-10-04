@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { BillingAddress } from './billingAddress.entity';
 import { AddressDto } from './dto/address.dto';
