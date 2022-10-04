@@ -15,11 +15,8 @@ import { PaymentModule } from './payment/payment.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
 import { InvoiceModule } from './invoice/invoice.module';
-import { CartController } from './cart/cart.controller';
 import { CartModule } from './cart/cart.module';
 import { CmsModule } from './cms/cms.module';
-import { PagesController } from './pages/pages.controller';
-import { PagesService } from './pages/pages.service';
 
 @Module({
   imports: [

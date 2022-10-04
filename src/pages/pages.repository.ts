@@ -8,7 +8,7 @@ export class PagesRepository extends Repository<Page> {
     const { name } = createPageDto;
 
     const page = this.create({
-      name,
+      name: name.toLowerCase(),
     });
 
     await this.save(page);

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PagesService } from 'src/pages/pages.service';
 import { CreateTextBlockDto } from './dto/create-text-block.dto';
@@ -10,11 +15,11 @@ export class CmsService {
   constructor(
     @InjectRepository(TextBlock)
     private textBlockRepository: TextBlockRepository,
+    @Inject(forwardRef(() => PagesService))
     private pagesService: PagesService,
   ) {}
 
-  async getPageTextBlocks(pageId: number): Promise<TextBlock[]> {
-    const page = await this.pagesService.getPageById(pageId);
+  async getPageTextBlocks(page): Promise<TextBlock[]> {
     return this.textBlockRepository.find({
       where: {
         page,
@@ -26,8 +31,16 @@ export class CmsService {
     const textBlock = await this.textBlockRepository.findOne(id);
 
     if (!textBlock) {
-      throw new BadRequestException(`Text with id: ${id} not found`);
+      throw new BadRequestException(`Text block with id: ${id} not found`);
     }
+
+    return textBlock;
+  }
+
+  async getTextBlockByPage(page): Promise<TextBlock[]> {
+    const textBlock = await this.textBlockRepository.find({
+      where: { page },
+    });
 
     return textBlock;
   }

@@ -12,6 +12,8 @@ export class Page {
   name: string;
 
   @ApiProperty()
-  @OneToMany(() => TextBlock, (textBlock) => textBlock.id)
+  @OneToMany(() => TextBlock, (textBlock) => textBlock.id, {
+    onDelete: 'CASCADE',
+  })
   textBlock: TextBlock;
 }

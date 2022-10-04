@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PagesModule } from 'src/pages/pages.module';
 import { CmsController } from './cms.controller';
@@ -10,8 +10,9 @@ import { TextBlockRepository } from './text-block.repository';
   controllers: [CmsController],
   imports: [
     TypeOrmModule.forFeature([TextBlock, TextBlockRepository]),
-    PagesModule,
+    forwardRef(() => PagesModule),
   ],
   providers: [CmsService],
+  exports: [CmsService],
 })
 export class CmsModule {}

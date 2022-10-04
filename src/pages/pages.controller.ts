@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { TextBlock } from 'src/cms/text-block.entity';
 import { CreatePageDto } from './dto/create-page.dto';
 import { Page } from './page.entity';
 import { PagesService } from './pages.service';
@@ -11,6 +12,11 @@ export class PagesController {
   @Get('')
   getPages(): Promise<Page[]> {
     return this.pagesService.getPages();
+  }
+
+  @Get('text-blocks/:name')
+  getPageTextBlock(@Param('name') name: string): Promise<TextBlock[]> {
+    return this.pagesService.getPageTextBlocks(name);
   }
 
   @Post('')

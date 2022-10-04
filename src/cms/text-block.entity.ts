@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Page } from 'src/pages/page.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
@@ -16,7 +16,6 @@ export class TextBlock {
   content: string;
 
   @ApiProperty()
-  @ApiPropertyOptional()
-  @ManyToOne(() => Page, (page) => page.id)
+  @ManyToOne(() => Page, (page) => page.id, { onDelete: 'CASCADE' })
   page: Page;
 }

@@ -1,5 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CmsService } from 'src/cms/cms.service';
+import { TextBlock } from 'src/cms/text-block.entity';
 import { CreatePageDto } from './dto/create-page.dto';
 import { Page } from './page.entity';
 import { PagesRepository } from './pages.repository';
@@ -9,6 +16,8 @@ export class PagesService {
   constructor(
     @InjectRepository(PagesRepository)
     private pagesRepository: PagesRepository,
+    @Inject(forwardRef(() => CmsService))
+    private cmsService: CmsService,
   ) {}
 
   async createPage(createPageDto: CreatePageDto): Promise<Page> {
@@ -16,8 +25,6 @@ export class PagesService {
     const pagesList = await (
       await this.getPages()
     ).map((page) => page.name.toLowerCase());
-
-    console.log(pagesList);
 
     if (pagesList.includes(name.toLowerCase())) {
       throw new BadRequestException(
@@ -28,7 +35,18 @@ export class PagesService {
     return await this.pagesRepository.createPage(createPageDto);
   }
 
-  async getPages(): Promise<Page[]> {
+  async getPageTextBlocks(name: string): Promise<TextBlock[]> {
+    const page = await this.getPageByName(name);
+    return await this.cmsService.getPageTextBlocks(page);
+  }
+
+  async getPageByName(name) {
+    return await this.pagesRepository.findOne({
+      where: { name },
+    });
+  }
+
+  async getPages() {
     return await this.pagesRepository.find();
   }
 
