@@ -1,13 +1,16 @@
 import {
+  Body,
   // Body,
   Controller,
   // Delete,
   Get,
   Param,
+  Post,
   // Post,
   // Put,
   // UseGuards,
 } from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto';
 // import { AuthGuard } from '@nestjs/passport';
 // import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
@@ -35,12 +38,12 @@ export class ProductsController {
     return this.productsService.getProductsByCategory(categoryId);
   }
 
-  // @Post()
+  @Post()
   // @UseGuards(RolesGuard(Role.Admin))
   // @UseGuards(AuthGuard())
-  // create(@Body() productDto: CreateProductDto): Promise<Product> {
-  //   return this.productsService.createProduct(productDto);
-  // }
+  create(@Body() productDto: CreateProductDto): Promise<Product> {
+    return this.productsService.createProduct(productDto);
+  }
 
   // @Put(':id')
   // @UseGuards(RolesGuard(Role.Admin))
