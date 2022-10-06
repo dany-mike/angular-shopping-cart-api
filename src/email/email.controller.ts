@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
-import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
+import { Role } from '../auth/enums/role.enum';
+import RolesGuard from '../auth/guards/roles.guard';
+import { IResetObject } from '../auth/interfaces/resetObject.interface';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { SendInvoiceDto } from './dtos/sendInvoice.dto';
 import { EmailService } from './email.service';

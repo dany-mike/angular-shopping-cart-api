@@ -1,4 +1,4 @@
-import { Page } from 'src/pages/page.entity';
+import { Page } from '../pages/page.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTextBlockDto } from './dto/create-text-block.dto';
 import { TextBlock } from './text-block.entity';

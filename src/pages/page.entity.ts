@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TextBlock } from 'src/cms/text-block.entity';
+import { TextBlock } from '../cms/text-block.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()

@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
+import { Role } from '../auth/enums/role.enum';
+import RolesGuard from '../auth/guards/roles.guard';
 import { AddressService } from './address.service';
 import { BillingAddress } from './billingAddress.entity';
 import { AddressDto } from './dto/address.dto';

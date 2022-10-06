@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
-import { User } from 'src/auth/user.entity';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../auth/user.entity';
 import { BillingAddress } from './billingAddress.entity';
 import { BillingAddressRepository } from './billingAddress.repository';
 import { AddressDto } from './dto/address.dto';

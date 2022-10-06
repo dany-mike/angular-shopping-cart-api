@@ -1,5 +1,5 @@
-import { User } from 'src/auth/user.entity';
-import { Product } from 'src/products/product.entity';
+import { User } from '../auth/user.entity';
+import { Product } from '../products/product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 

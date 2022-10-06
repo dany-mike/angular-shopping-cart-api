@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BillingAddress } from 'src/address/billingAddress.entity';
-import { ShippingAddress } from 'src/address/shippingAddress.entity';
-import { User } from 'src/auth/user.entity';
-import { Product } from 'src/products/product.entity';
+import { BillingAddress } from '../address/billingAddress.entity';
+import { ShippingAddress } from '../address/shippingAddress.entity';
+import { User } from '../auth/user.entity';
+import { Product } from '../products/product.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

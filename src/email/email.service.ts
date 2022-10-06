@@ -1,10 +1,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthService } from 'src/auth/auth.service';
-import { IResetObject } from 'src/auth/interfaces/resetObject.interface';
-import { InvoiceService } from 'src/invoice/invoice.service';
-import { OrderService } from 'src/order/order.service';
+import { AuthService } from '../auth/auth.service';
+import { IResetObject } from '../auth/interfaces/resetObject.interface';
+import { InvoiceService } from '../invoice/invoice.service';
+import { OrderService } from '../order/order.service';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { SendInvoiceDto } from './dtos/sendInvoice.dto';
 

@@ -1,7 +1,7 @@
 import { Product } from './product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Category } from 'src/category/category.entity';
+import { Category } from '../category/category.entity';
 import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(Product)

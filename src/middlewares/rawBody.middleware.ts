@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { json } from 'body-parser';
-import RequestWithRawBody from 'src/interface/requestWithRawBody.interface';
+import RequestWithRawBody from '../interface/requestWithRawBody.interface';
 
 function rawBodyMiddleware() {
   return json({

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Page } from 'src/pages/page.entity';
+import { Page } from '../pages/page.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()

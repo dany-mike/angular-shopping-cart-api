@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
-import { OrderService } from 'src/order/order.service';
+import { AuthService } from '../auth/auth.service';
+import { OrderService } from '../order/order.service';
 import { Stripe } from 'stripe';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
 import { NotificationRepository } from './notification.repository';

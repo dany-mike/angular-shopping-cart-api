@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/category/category.entity';
-import { CategoryService } from 'src/category/category.service';
+import { Category } from '../category/category.entity';
+import { CategoryService } from '../category/category.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
 import { ProductsRepository } from './products.repository';

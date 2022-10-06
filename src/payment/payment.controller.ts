@@ -8,9 +8,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Role } from 'src/auth/enums/role.enum';
-import RolesGuard from 'src/auth/guards/roles.guard';
-import RequestWithRawBody from 'src/interface/requestWithRawBody.interface';
+import { Role } from '../auth/enums/role.enum';
+import RolesGuard from '../auth/guards/roles.guard';
+import RequestWithRawBody from '../interface/requestWithRawBody.interface';
 import { PaymentIntentDto } from './dto/paymentIntents.dto';
 import { Payment } from './payment.entity';
 import { PaymentService } from './payment.service';
